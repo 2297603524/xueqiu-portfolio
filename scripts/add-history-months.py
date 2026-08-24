@@ -300,8 +300,8 @@ def build_month(month_def, prev_a, prev_h):
 def main():
     data = json.loads(DATA_PATH.read_text(encoding="utf-8"))
 
-    # 备份现有最新月份（之后作为 history 最末保留）
-    newest = data["history"][0]
+    # 备份现有最新月份（history 升序，最后一个为最新；之后作为 history 最末保留）
+    newest = data["history"][-1]
 
     # 按时间顺序构建历史月份
     prev_a, prev_h = [], []

@@ -62,12 +62,17 @@ async function main() {
   const raw = readFileSync(DATA_PATH, "utf-8");
   const data = JSON.parse(raw);
 
-  // 收集所有需要行情的代码（去重）
-  const codes = new Set();
-  for (const h of data.history) {
-    for (const s of h.aShares.holdings) if (s.shares > 0) codes.add(tencentCode(s.code));
-    for (const s of h.hShares.holdings) if (s.shares > 0) codes.add(tencentCode(s.code));
+  // 只刷新最新月份（history 升序排列，最后一个是最新）；历史月份保留当时价格
+  const latest = data.history[data.history.length - 1];
+  if (!latest) {
+    console.log("没有历史数据可刷新。");
+    return;
   }
+
+  // 收集最新月份需要的行情代码（去重）
+  const codes = new Set();
+  for (const s of latest.aShares.holdings) if (s.shares > 0) codes.add(tencentCode(s.code));
+  for (const s of latest.hShares.holdings) if (s.shares > 0) codes.add(tencentCode(s.code));
   const codeList = [...codes];
   if (codeList.length === 0) {
     console.log("没有持仓代码需要刷新。");
@@ -108,9 +113,9 @@ async function main() {
   }
   console.log(`HKD/CNY 汇率: ${hkdCny.toFixed(4)}`);
 
-  // 3. 逐月刷新
+  // 3. 刷新最新月份
   let updatedCount = 0;
-  for (const h of data.history) {
+  for (const h of [latest]) {
     const aShares = h.aShares.holdings;
     const hShares = h.hShares.holdings;
 
