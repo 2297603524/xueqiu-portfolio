@@ -1,0 +1,24 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html,
+body,
+#root {
+  background: #f5f6f8;
+  color: #0f172a;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
+    "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* 数字字体 */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+/* 表格斑马纹 */
+.table-zebra > tbody > tr:nth-child(odd) {
+  background: #fafbfc;
+}

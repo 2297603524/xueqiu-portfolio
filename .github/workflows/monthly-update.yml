@@ -1,0 +1,85 @@
+name: 持仓月报-云端自动更新
+
+# 触发方式
+on:
+  schedule:
+    # 每月 1 日 09:00（北京时间，UTC 01:00）
+    - cron: "0 1 1 * *"
+  workflow_dispatch: {} # 也支持在仓库 Actions 页面手动触发
+  push:
+    branches: [main]
+    paths: [public/data.json] # 数据变更自动重新部署
+
+permissions:
+  contents: write # 推回数据 / 部署 gh-pages 分支
+  pages: write # 启用 GitHub Pages
+  id-token: write
+
+concurrency:
+  group: monthly-update
+  cancel-in-progress: false
+
+jobs:
+  update-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+
+      - name: 刷新行情（腾讯行情 + 新浪汇率）
+        run: node scripts/refresh-quotes.mjs
+
+      - name: 提交数据变更（如无变化则跳过）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data.json
+          if git diff --cached --quiet; then
+            echo "数据无变化，跳过提交"
+          else
+            git commit -m "chore: 自动刷新行情 $(date +%Y-%m-%d)"
+            git push
+          fi
+
+      - name: 安装依赖并构建
+        run: |
+          npm ci
+          npm run build
+
+      - name: 启用 GitHub Pages（首次自动开启，幂等）
+        run: |
+          code=$(curl -s -o /tmp/pages.json -w "%{http_code}" -X POST \
+            -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+            -H "Accept: application/vnd.github+json" \
+            https://api.github.com/repos/${{ github.repository }}/pages \
+            -d '{"build_type":"legacy","source":{"branch":"gh-pages","path":"/"}}')
+          echo "POST /pages -> $code"
+          if [ "$code" != "201" ] && [ "$code" != "409" ]; then
+            cat /tmp/pages.json
+          fi
+          # 若已启用（409），改为更新 source
+          if [ "$code" = "409" ]; then
+            curl -s -o /tmp/pages-put.json -w "\nPUT /pages -> %{http_code}\n" -X PUT \
+              -H "Authorization: Bearer ${{ secrets.GITHUB_TOKEN }}" \
+              -H "Accept: application/vnd.github+json" \
+              https://api.github.com/repos/${{ github.repository }}/pages \
+              -d '{"build_type":"legacy","source":{"branch":"gh-pages","path":"/"}}'
+            cat /tmp/pages-put.json
+          fi
+
+      - name: 部署到 GitHub Pages（gh-pages 分支）
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
+          publish_branch: gh-pages
+          force_orphan: true
+          user_name: "github-actions[bot]"
+          user_email: "41898282+github-actions[bot]@users.noreply.github.com"
+          commit_message: "deploy: $(date +%Y-%m-%d) 持仓月报"
