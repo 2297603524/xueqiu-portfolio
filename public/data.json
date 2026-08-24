@@ -1842,7 +1842,7 @@
       },
       "hShares": {
         "marketValueHKD": null,
-        "marketValueCNY": 4623855,
+        "marketValueCNY": 4631858,
         "holdings": [
           {
             "code": "01898.HK",
@@ -1851,9 +1851,9 @@
             "delta": -30000,
             "op": "reduce",
             "costPriceHKD": -3.04,
-            "marketValueCNY": 1925354,
-            "weight": 0.09917844350822326,
-            "profitAmountCNY": 2432992,
+            "marketValueCNY": 1928686,
+            "weight": 0.099350080814282,
+            "profitAmountCNY": 2437203,
             "profitRatio": null
           },
           {
@@ -1863,9 +1863,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 4.21,
-            "marketValueCNY": 1292389,
-            "weight": 0.06657327921366625,
-            "profitAmountCNY": 282935,
+            "marketValueCNY": 1294626,
+            "weight": 0.0666885111025178,
+            "profitAmountCNY": 283425,
             "profitRatio": 0.2802850356294536
           },
           {
@@ -1875,9 +1875,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 0.776,
-            "marketValueCNY": 640543,
-            "weight": 0.0329955206887086,
-            "profitAmountCNY": 275057,
+            "marketValueCNY": 641652,
+            "weight": 0.033052647271067284,
+            "profitAmountCNY": 275533,
             "profitRatio": 0.752577319587629
           },
           {
@@ -1887,9 +1887,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 25.55,
-            "marketValueCNY": 652532,
-            "weight": 0.0336130956173815,
-            "profitAmountCNY": -3854,
+            "marketValueCNY": 653661,
+            "weight": 0.03367125243567091,
+            "profitAmountCNY": -3860,
             "profitRatio": -0.005870841487279926
           },
           {
@@ -1899,9 +1899,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 365.15,
-            "marketValueCNY": 113037,
-            "weight": 0.005822738945066223,
-            "profitAmountCNY": 19229,
+            "marketValueCNY": 113233,
+            "weight": 0.005832835257187325,
+            "profitAmountCNY": 19262,
             "profitRatio": 0.2049842530466932
           }
         ]
