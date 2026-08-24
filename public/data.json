@@ -278,7 +278,7 @@
             "costPrice": 43.684,
             "currentPrice": 39.75,
             "marketValue": 0,
-            "weight": 0.0,
+            "weight": 0,
             "profitAmount": 0,
             "profitRatio": -0.09005585569087075
           }
@@ -770,7 +770,7 @@
             "costPrice": 38.304,
             "currentPrice": 40.5,
             "marketValue": 0,
-            "weight": 0.0,
+            "weight": 0,
             "profitAmount": 0,
             "profitRatio": 0.057330827067669114
           },
@@ -1135,8 +1135,8 @@
       "month": "2026-02",
       "label": "2026 年 2 月",
       "summary": {
-        "totalAssets": 18885000.0,
-        "availableCash": 80000.0,
+        "totalAssets": 18885000,
+        "availableCash": 80000,
         "cashRatio": 0.004236166269526079
       },
       "categories": [
@@ -1358,8 +1358,8 @@
       "month": "2026-03",
       "label": "2026 年 3 月",
       "summary": {
-        "totalAssets": 19339000.0,
-        "availableCash": 700000.0,
+        "totalAssets": 19339000,
+        "availableCash": 700000,
         "cashRatio": 0.03619628729510316
       },
       "categories": [
@@ -1547,8 +1547,8 @@
             "shares": 8000,
             "delta": 0,
             "op": "open",
-            "costPrice": 95.0,
-            "currentPrice": 105.0,
+            "costPrice": 95,
+            "currentPrice": 105,
             "marketValue": 840000,
             "weight": 0.04343554475412379,
             "profitAmount": 80000,
@@ -1842,7 +1842,7 @@
       },
       "hShares": {
         "marketValueHKD": null,
-        "marketValueCNY": 4623796,
+        "marketValueCNY": 4623855,
         "holdings": [
           {
             "code": "01898.HK",
@@ -1851,9 +1851,9 @@
             "delta": -30000,
             "op": "reduce",
             "costPriceHKD": -3.04,
-            "marketValueCNY": 1925329,
-            "weight": 0.09917715571330986,
-            "profitAmountCNY": 2432961,
+            "marketValueCNY": 1925354,
+            "weight": 0.09917844350822326,
+            "profitAmountCNY": 2432992,
             "profitRatio": null
           },
           {
@@ -1863,9 +1863,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 4.21,
-            "marketValueCNY": 1292373,
-            "weight": 0.06657245502492166,
-            "profitAmountCNY": 282931,
+            "marketValueCNY": 1292389,
+            "weight": 0.06657327921366625,
+            "profitAmountCNY": 282935,
             "profitRatio": 0.2802850356294536
           },
           {
@@ -1875,9 +1875,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 0.776,
-            "marketValueCNY": 640535,
-            "weight": 0.03299510859433631,
-            "profitAmountCNY": 275053,
+            "marketValueCNY": 640543,
+            "weight": 0.0329955206887086,
+            "profitAmountCNY": 275057,
             "profitRatio": 0.752577319587629
           },
           {
@@ -1887,9 +1887,9 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 25.55,
-            "marketValueCNY": 652523,
-            "weight": 0.03361263201121267,
-            "profitAmountCNY": -3853,
+            "marketValueCNY": 652532,
+            "weight": 0.0336130956173815,
+            "profitAmountCNY": -3854,
             "profitRatio": -0.005870841487279926
           },
           {
@@ -1899,8 +1899,8 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 365.15,
-            "marketValueCNY": 113036,
-            "weight": 0.0058226874332696875,
+            "marketValueCNY": 113037,
+            "weight": 0.005822738945066223,
             "profitAmountCNY": 19229,
             "profitRatio": 0.2049842530466932
           }
