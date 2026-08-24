@@ -15,9 +15,6 @@ export function Header({ data, history, activeMonth, onMonthChange }: HeaderProp
           <h1 className="text-2xl md:text-3xl font-semibold text-ink-900 tracking-tight">
             {data.title}
           </h1>
-          <p className="mt-1 text-sm text-ink-500">
-            {data.subtitle} · 每月初更新
-          </p>
         </div>
         <div className="flex items-center gap-2">
           <span className="text-xs text-ink-500">切换月份</span>
