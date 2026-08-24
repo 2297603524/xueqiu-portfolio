@@ -2,6 +2,11 @@
 
 一个仿雪球持仓展示风格的个人网站，每月更新一次「超级鹿鼎公」的 A/H 股持仓变动。**数据自动更新，无需手动维护。**
 
+## 访问地址
+
+- **GitHub Pages（云端自动更新主入口）**：https://2297603524.github.io/xueqiu-portfolio/
+- CloudStudio 备用入口：https://0f33efb1227c40b0b0985cb999648e3a.app.workbuddy.link
+
 ## 技术栈
 
 - Vite + React 18 + TypeScript
@@ -10,18 +15,21 @@
 
 ## 自动更新机制（核心）
 
-每月 1 日 09:00 由 WorkBuddy 自动化任务执行，全程无人值守：
+云端流水线由 GitHub Actions 驱动（.github/workflows/monthly-update.yml），**不依赖任何本地电脑**：
 
-1. **行情刷新**：`node scripts/refresh-quotes.mjs` 通过腾讯行情接口（qt.gtimg.cn）自动拉取所有 A/H 股现价，换算 HKD/CNY 汇率（新浪接口），重算市值/仓位/盈亏并写回 `public/data.json`。
-2. **月报检测**：抓取雪球超级鹿鼎公主页（xueqiu.com/8790885129），比对是否有新月份「游戏仓X月PS图」月报。
-3. **快照生成**：如发现新月报，按帖文数据生成新月份快照追加到 history（收益数据自动填充，持仓变动按帖子操作描述调整；信息不足时宁缺毋滥）。
-4. **构建 + 部署**：`npm run build` 后自动部署到 CloudStudio，产出新分享链接。
+1. **每月 1 日 09:00（北京时间）自动触发**，也支持在仓库 Actions 页面手动运行（Run workflow）。
+2. **行情刷新**：`node scripts/refresh-quotes.mjs` 通过腾讯行情接口（qt.gtimg.cn）自动拉取所有 A/H 股现价，换算 HKD/CNY 汇率（新浪接口），重算市值/仓位/盈亏并写回 `public/data.json`。
+3. **数据自动提交**：刷新结果自动 commit 并 push 回 main 分支。
+4. **自动构建**：`npm ci && npm run build`（base=/xueqiu-portfolio/ 子路径）。
+5. **自动部署**：peaceiris/actions-gh-pages 将 dist 部署到 gh-pages 分支，GitHub Pages 自动更新。
+6. 数据变更（data.json 被推送）也会自动触发重新部署。
 
 ### 手动执行一次
 
 ```bash
 node scripts/refresh-quotes.mjs   # 仅刷新行情
-npm run build                     # 重新构建
+npm run build                     # 构建（GitHub Pages 子路径）
+npm run build:root                # 构建（根路径，CloudStudio 用）
 ```
 
 ## 项目结构
@@ -77,7 +85,7 @@ xueqiu-portfolio/
 
 > 提示：不需要再写新代码，改完 JSON 重新 build 部署即可。
 
-> 重要：由于自动化任务生成快照时依据的是雪球帖子的文字描述（持仓明细在帖子的 PS 图片里，无法自动读取），部分明细可能存在误差。如发现偏差，可在 automation 任务的汇报里指出，或手动调整 `public/data.json` 后重跑 `npm run build`。
+> 重要：GitHub Actions 只能自动刷新**价格**（现价/市值/仓位/盈亏），无法自动读取雪球月报 PS 图片里的**持仓变动明细**（新开仓/加仓/减仓/清仓的股数）。这类变动需要每月根据帖子内容手动调整 `public/data.json` 的 holdings/categories，推送后会自动重新部署。如需帮忙，让 WorkBuddy 处理即可。
 
 ## 本地开发
 
