@@ -1,0 +1,27 @@
+name: 探测-雪球云端可达性
+
+on:
+  workflow_dispatch: {}
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 探测雪球主页与鹿鼎公帖子
+        run: |
+          set +e
+          UA="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0 Safari/537.36"
+          echo "=== 1. 雪球主页 ==="
+          code1=$(curl -s -m 20 -o home.html -w "%{http_code}" -A "$UA" https://xueqiu.com/)
+          echo "HTTP:$code1 大小:$(wc -c < home.html 2>/dev/null)"
+          head -c 300 home.html 2>/dev/null; echo
+          echo "=== 2. 鹿鼎公帖子(7月PS图) ==="
+          code2=$(curl -s -m 20 -o status.html -w "%{http_code}" -A "$UA" "https://xueqiu.com/8790885129/403122366")
+          echo "HTTP:$code2 大小:$(wc -c < status.html 2>/dev/null)"
+          head -c 300 status.html 2>/dev/null; echo
+          echo "=== 3. 帖子里的图片(如果有) ==="
+          grep -oE 'https?://[^"]+\.(jpg|jpeg|png|webp)[^"]*' status.html 2>/dev/null | head -5
+          echo "=== 4. 带 cookie 尝试(模拟真实浏览器) ==="
+          curl -s -m 20 -c cookies.txt -o home2.html -w "HTTP:%{http_code} 大小:%{size_download}\n" -A "$UA" -H "Accept: text/html" https://xueqiu.com/
+          curl -s -m 20 -b cookies.txt -o status2.html -w "HTTP:%{http_code} 大小:%{size_download}\n" -A "$UA" -H "Referer: https://xueqiu.com/" "https://xueqiu.com/8790885129/403122366"
+          head -c 300 status2.html 2>/dev/null; echo
