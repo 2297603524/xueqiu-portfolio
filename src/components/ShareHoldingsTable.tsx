@@ -104,9 +104,9 @@ export function ASharesTable({ holdings }: ASharesTableProps) {
                     </Td>
                     <Td
                       className={`text-right font-medium ${
-                        h.profitRatio > 0
+                        (h.profitRatio ?? 0) > 0
                           ? "text-up"
-                          : h.profitRatio < 0
+                          : (h.profitRatio ?? 0) < 0
                           ? "text-down"
                           : "text-ink-500"
                       }`}
@@ -167,9 +167,9 @@ export function ASharesTable({ holdings }: ASharesTableProps) {
                   label="盈亏%"
                   value={fmtSignedPercent(h.profitRatio)}
                   valueClass={
-                    h.profitRatio > 0
+                    (h.profitRatio ?? 0) > 0
                       ? "text-up"
-                      : h.profitRatio < 0
+                      : (h.profitRatio ?? 0) < 0
                       ? "text-down"
                       : ""
                   }

@@ -30,7 +30,7 @@ export interface AShareHolding {
   marketValue: number;
   weight: number; // 占比 (0-1)
   profitAmount: number;
-  profitRatio: number; // 收益率 (允许负)
+  profitRatio: number | null; // 收益率 (允许负；成本为 0 时为 null)
 }
 
 export interface HShareHolding {
