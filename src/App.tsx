@@ -16,7 +16,7 @@ function App() {
       .then((r) => r.json())
       .then((d: PortfolioData) => {
         setData(d);
-        if (d.history.length > 0) setActiveMonth(d.history[0].month);
+        if (d.history.length > 0) setActiveMonth(d.history[d.history.length - 1].month);
       })
       .catch((e) => setErr(String(e)));
   }, []);
