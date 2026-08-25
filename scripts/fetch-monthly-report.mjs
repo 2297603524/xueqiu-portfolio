@@ -263,6 +263,18 @@ function buildSnapshot(prev, cur, hkdCny) {
       availableCash: cur.cash,
       cashRatio: total > 0 ? cur.cash / total : 0,
     },
+    // 月度盈亏 = 当月总资产 − 上月总资产（无上月数据时为 null）
+    monthlyPL: {
+      profit:
+        prev && prev.summary?.totalAssets != null
+          ? Math.round(total - prev.summary.totalAssets)
+          : null,
+      ratio:
+        prev && prev.summary?.totalAssets
+          ? (total - prev.summary.totalAssets) / prev.summary.totalAssets
+          : null,
+      note: "总资产月环比",
+    },
     categories,
     aShares: {
       marketValue: aShares.reduce((a, s) => a + s.marketValue, 0),

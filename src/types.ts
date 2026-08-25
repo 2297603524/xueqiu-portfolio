@@ -54,6 +54,12 @@ export interface MonthReport {
     availableCash: number;
     cashRatio: number;
   };
+  /** 月度盈亏（当月盈利额/收益率，估算或月报原始数据） */
+  monthlyPL?: {
+    profit: number | null;
+    ratio: number | null;
+    note?: string;
+  };
   categories: Category[];
   aShares: {
     marketValue: number;

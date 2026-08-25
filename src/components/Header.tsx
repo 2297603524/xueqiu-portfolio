@@ -20,6 +20,8 @@ interface HeaderProps {
   totalProfit: number | null;
   /** 当日盈亏（仅实时刷新开启时有效） */
   dailyPL: number | null;
+  /** 月度盈亏（当月盈利额/收益率） */
+  monthlyPL: { profit: number | null; ratio: number | null; note?: string } | undefined;
   /** 当前月份是否为估算快照 */
   estimated: boolean;
 }
@@ -39,6 +41,7 @@ export function Header({
   hShareValueCNY,
   totalProfit,
   dailyPL,
+  monthlyPL,
   estimated,
 }: HeaderProps) {
   const timeStr = lastUpdated
@@ -146,6 +149,40 @@ export function Header({
               </div>
               {fmtPercent(summary.cashRatio, 1)}
             </div>
+            {monthlyPL?.profit != null && (
+              <div className="mt-0.5 flex items-center gap-1.5 text-[11px]">
+                <span className="text-rose-400">本月盈亏</span>
+                <span
+                  className={`font-mono font-semibold tabular-nums ${
+                    monthlyPL.profit > 0
+                      ? "text-rose-600"
+                      : monthlyPL.profit < 0
+                      ? "text-emerald-600"
+                      : "text-rose-500"
+                  }`}
+                >
+                  {monthlyPL.profit > 0 ? "+" : ""}
+                  {fmtMoney(monthlyPL.profit)}
+                </span>
+                {monthlyPL.ratio != null && (
+                  <span
+                    className={`font-mono tabular-nums ${
+                      monthlyPL.ratio > 0
+                        ? "text-rose-600"
+                        : monthlyPL.ratio < 0
+                        ? "text-emerald-600"
+                        : "text-rose-500"
+                    }`}
+                  >
+                    （{monthlyPL.ratio > 0 ? "+" : ""}
+                    {fmtPercent(Math.abs(monthlyPL.ratio), 2)}）
+                  </span>
+                )}
+                {monthlyPL.note && (
+                  <span className="text-rose-300">· {monthlyPL.note}</span>
+                )}
+              </div>
+            )}
           </div>
 
           <div>

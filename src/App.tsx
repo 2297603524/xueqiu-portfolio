@@ -147,6 +147,7 @@ function App() {
         hShareValueCNY={displayReport.hShares.marketValueCNY}
         totalProfit={totalProfit}
         dailyPL={dailyPL}
+        monthlyPL={displayReport.monthlyPL}
         estimated={estimated}
       />
 
