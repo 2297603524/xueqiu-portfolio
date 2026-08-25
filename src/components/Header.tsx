@@ -18,6 +18,8 @@ interface HeaderProps {
   hShareValueCNY: number;
   /** 实时总盈亏（A+H，仅最新月份有值） */
   totalProfit: number | null;
+  /** 当日盈亏（仅实时刷新开启时有效） */
+  dailyPL: number | null;
   /** 当前月份是否为估算快照 */
   estimated: boolean;
 }
@@ -36,6 +38,7 @@ export function Header({
   aShareValue,
   hShareValueCNY,
   totalProfit,
+  dailyPL,
   estimated,
 }: HeaderProps) {
   const timeStr = lastUpdated
@@ -121,7 +124,7 @@ export function Header({
         )}
 
         {/* 核心数字区 */}
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-4">
+        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
             <div className="text-xs text-slate-400">账户总资产（CNY）</div>
             <div className="mt-1 font-mono text-3xl font-bold tabular-nums tracking-tight md:text-4xl">
@@ -170,6 +173,36 @@ export function Header({
             </div>
             <div className="mt-1 text-[11px] text-slate-500">
               {totalProfit === null ? "历史月份不计算" : "按最新行情计算"}
+            </div>
+          </div>
+
+          <div>
+            <div className="flex items-baseline gap-1.5">
+              <span className="text-xs text-slate-400">当日盈亏</span>
+              {dailyPL !== null && live && (
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400 live-dot" title="实时刷新中" />
+              )}
+            </div>
+            <div
+              key={dailyPL ?? 0}
+              className={`mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl ${
+                dailyPL === null
+                  ? "text-slate-500"
+                  : dailyPL > 0
+                  ? "text-rose-400 flash-up"
+                  : dailyPL < 0
+                  ? "text-emerald-400 flash-down"
+                  : "text-slate-200"
+              }`}
+            >
+              {dailyPL === null
+                ? "—"
+                : dailyPL > 0
+                ? `+${fmtMoney(dailyPL)}`
+                : fmtMoney(dailyPL)}
+            </div>
+            <div className="mt-1 text-[11px] text-slate-500">
+              {dailyPL === null ? "需开启实时" : "相对昨收 · 实时"}
             </div>
           </div>
         </div>

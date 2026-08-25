@@ -93,6 +93,25 @@ function App() {
     return a + h;
   }, [displayReport]);
 
+  // 当日盈亏（仅实时刷新时有效）：A/H 股相对昨收的涨跌额合计
+  // A 股：shares * (currentPrice - prevClose)，单位 CNY
+  // H 股：shares * (currentPrice_HKD - prevClose_HKD) * hkdCny，单位 CNY
+  const dailyPL = useMemo(() => {
+    if (!quotes || !displayReport) return null;
+    let a = 0;
+    for (const s of displayReport.aShares.holdings) {
+      const q = quotes.get(s.code);
+      if (q && s.shares > 0) a += s.shares * (q.price - q.prevClose);
+    }
+    let h = 0;
+    for (const s of displayReport.hShares.holdings) {
+      const q = quotes.get(s.code);
+      if (q && s.shares > 0)
+        h += s.shares * (q.price - q.prevClose) * hkdCny;
+    }
+    return a + h;
+  }, [quotes, displayReport, hkdCny]);
+
   if (err) {
     return (
       <div className="flex min-h-screen items-center justify-center text-slate-600">
@@ -126,6 +145,7 @@ function App() {
         aShareValue={displayReport.aShares.marketValue}
         hShareValueCNY={displayReport.hShares.marketValueCNY}
         totalProfit={totalProfit}
+        dailyPL={dailyPL}
         estimated={estimated}
       />
 
@@ -151,6 +171,7 @@ function App() {
           estimated={estimated}
           live={live}
           hkdCny={hkdCny}
+          dailyPL={dailyPL}
         />
       </div>
     </main>

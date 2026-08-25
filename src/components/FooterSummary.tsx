@@ -10,6 +10,7 @@ interface FooterSummaryProps {
   estimated?: boolean;
   live?: boolean;
   hkdCny: number;
+  dailyPL: number | null;
 }
 
 export function FooterSummary({
@@ -22,11 +23,12 @@ export function FooterSummary({
   estimated,
   live,
   hkdCny,
+  dailyPL,
 }: FooterSummaryProps) {
   return (
     <section className="mx-auto mt-6 max-w-6xl px-4 pb-12 fade-in-up">
       {/* 统计卡 */}
-      <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
+      <div className="grid grid-cols-2 gap-3 md:grid-cols-3 lg:grid-cols-6">
         <StatCard
           label="A 股持仓"
           value={fmtMoney(aShareValue)}
@@ -60,6 +62,28 @@ export function FooterSummary({
           valueClass={
             cashRatio < 0.05 ? "text-emerald-600" : cashRatio < 0.2 ? "text-slate-900" : "text-rose-600"
           }
+        />
+        <StatCard
+          label="当日盈亏"
+          value={
+            dailyPL === null
+              ? "—"
+              : dailyPL > 0
+              ? `+${fmtMoney(dailyPL)}`
+              : fmtMoney(dailyPL)
+          }
+          subtle={dailyPL === null ? "需开启实时" : "相对昨收 · 实时"}
+          accent="from-amber-500 to-yellow-400"
+          valueClass={
+            dailyPL === null
+              ? "text-slate-500"
+              : dailyPL > 0
+              ? "text-rose-600"
+              : dailyPL < 0
+              ? "text-emerald-600"
+              : "text-slate-900"
+          }
+          liveDot={dailyPL !== null && live}
         />
       </div>
 
@@ -105,6 +129,7 @@ function StatCard({
   highlight,
   valueClass = "text-slate-900",
   accent,
+  liveDot,
 }: {
   label: string;
   value: string;
@@ -112,6 +137,7 @@ function StatCard({
   highlight?: boolean;
   valueClass?: string;
   accent: string;
+  liveDot?: boolean;
 }) {
   return (
     <div
@@ -121,7 +147,10 @@ function StatCard({
     >
       {/* 顶部渐变细条 */}
       <div className={`absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r ${accent}`} />
-      <div className="text-xs text-slate-500">{label}</div>
+      <div className="flex items-center gap-1.5 text-xs text-slate-500">
+        <span>{label}</span>
+        {liveDot && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 live-dot" />}
+      </div>
       <div
         className={`mt-1.5 font-mono text-lg font-bold tabular-nums ${valueClass}`}
       >
