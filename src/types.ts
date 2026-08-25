@@ -67,6 +67,10 @@ export interface MonthReport {
   audit?: {
     by: string;
     verified: boolean;
+    /** 是否为插值估算快照（数据待真实月报覆盖） */
+    estimated?: boolean;
+    method?: string;
+    note?: string;
   };
 }
 
