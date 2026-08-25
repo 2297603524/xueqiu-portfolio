@@ -103,6 +103,22 @@ function PriceCell({
   );
 }
 
+/** 仓位列：百分比数字 + 红色渐变进度条（0~100%） */
+function WeightCell({ weight }: { weight: number }) {
+  const pct = Math.max(0, Math.min(weight, 1)) * 100;
+  return (
+    <div className="flex items-center justify-end gap-2">
+      <span className="text-slate-600 tabular-nums">{fmtPercent(weight, 2)}</span>
+      <div className="h-1.5 w-14 overflow-hidden rounded-full bg-rose-100">
+        <div
+          className="h-full rounded-full bg-gradient-to-r from-rose-400 to-rose-600 transition-all duration-300"
+          style={{ width: `${pct}%` }}
+        />
+      </div>
+    </div>
+  );
+}
+
 function ProfitCell({
   ratio,
   amount,
@@ -114,8 +130,7 @@ function ProfitCell({
   sharesZero?: boolean;
   /** 成本为负（分红已回收本金），比例无法常规计算 */
   negativeCost?: boolean;
-}) {
-  const cls =
+}) {  const cls =
     ratio === null
       ? "text-slate-400"
       : ratio > 0
@@ -252,8 +267,8 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                     />
                   </Td>
                   <Td className="text-right">{fmtMoney(h.marketValue)}</Td>
-                  <Td className="text-right text-slate-600">
-                    {h.weight === 0 ? "—" : fmtPercent(h.weight, 2)}
+                  <Td className="text-right">
+                    {h.weight === 0 ? "—" : <WeightCell weight={h.weight} />}
                   </Td>
                   <Td className="text-right">
                     <ProfitCell
@@ -437,9 +452,9 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                       />
                     </Td>
                     <Td className="text-right">{fmtMoney(h.marketValueCNY)}</Td>
-                    <Td className="text-right text-slate-600">
-                      {fmtPercent(h.weight, 2)}
-                    </Td>
+                  <Td className="text-right">
+                    <WeightCell weight={h.weight} />
+                  </Td>
                   <Td className="text-right">
                     <ProfitCell
                       ratio={h.profitRatio}
