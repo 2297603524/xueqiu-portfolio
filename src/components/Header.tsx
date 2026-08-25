@@ -174,35 +174,37 @@ export function Header({
           </div>
         </div>
 
-        {/* 月份切换 tabs */}
-        <div className="month-scroll mt-6 -mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1">
-          {history.map((h) => {
-            const active = h.month === activeMonth;
-            const est = !!h.audit?.estimated;
-            return (
-              <button
-                key={h.month}
-                type="button"
-                onClick={() => onMonthChange(h.month)}
-                className={`relative shrink-0 rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap transition ${
-                  active
-                    ? "bg-white font-semibold text-slate-900 shadow-md"
-                    : "bg-white/5 text-slate-300 ring-1 ring-white/10 hover:bg-white/10"
-                }`}
-              >
-                {h.month}
-                {est && (
-                  <span
-                    className={`ml-1.5 inline-block h-1.5 w-1.5 rounded-full ${
-                      active ? "bg-amber-500" : "bg-amber-400/70"
-                    }`}
-                    title="估算数据"
-                  />
-                )}
-              </button>
-            );
-          })}
-        </div>
+        {/* 月份切换 tabs（仅在有多个月份时显示） */}
+        {history.length > 1 && (
+          <div className="month-scroll mt-6 -mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1">
+            {history.map((h) => {
+              const active = h.month === activeMonth;
+              const est = !!h.audit?.estimated;
+              return (
+                <button
+                  key={h.month}
+                  type="button"
+                  onClick={() => onMonthChange(h.month)}
+                  className={`relative shrink-0 rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap transition ${
+                    active
+                      ? "bg-white font-semibold text-slate-900 shadow-md"
+                      : "bg-white/5 text-slate-300 ring-1 ring-white/10 hover:bg-white/10"
+                  }`}
+                >
+                  {h.month}
+                  {est && (
+                    <span
+                      className={`ml-1.5 inline-block h-1.5 w-1.5 rounded-full ${
+                        active ? "bg-amber-500" : "bg-amber-400/70"
+                      }`}
+                      title="估算数据"
+                    />
+                  )}
+                </button>
+              );
+            })}
+          </div>
+        )}
       </div>
     </header>
   );
