@@ -276,8 +276,8 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
         />
 
         {/* 桌面表格（表头吸顶 + 可排序） */}
-        <div className="hidden md:block overflow-auto max-h-[540px]">
-          <table className="w-full min-w-[760px] text-sm tabular-nums">
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-sm tabular-nums">
             <thead className="sticky top-0 z-10 bg-rose-50/95 text-xs uppercase tracking-wide text-rose-500 backdrop-blur">
               <tr>
                 <Th>代码</Th>
@@ -521,8 +521,8 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
         />
 
         {/* 桌面表格（表头吸顶 + 可排序） */}
-        <div className="hidden md:block overflow-auto max-h-[420px]">
-          <table className="w-full min-w-[760px] text-sm tabular-nums">
+        <div className="hidden md:block overflow-x-auto">
+          <table className="w-full text-sm tabular-nums">
             <thead className="sticky top-0 z-10 bg-rose-50/95 text-xs uppercase tracking-wide text-rose-500 backdrop-blur">
               <tr>
                 <Th>代码</Th>

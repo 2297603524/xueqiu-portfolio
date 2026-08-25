@@ -154,17 +154,15 @@ function App() {
       <div className="mx-auto max-w-7xl px-4">
         <CategoryCards categories={displayReport.categories} />
 
-        {/* 大屏 A/H 表格并排双列 */}
-        <div className="grid items-start gap-4 xl:grid-cols-2">
-          <ASharesTable holdings={displayReport.aShares.holdings} quotes={quotes} live={live} />
+        {/* A/H 表格上下排列（全宽显示，列完整无需横向滚动） */}
+        <ASharesTable holdings={displayReport.aShares.holdings} quotes={quotes} live={live} />
 
-          <HSharesTable
-            holdings={displayReport.hShares.holdings}
-            quotes={quotes}
-            live={live}
-            hkdCny={hkdCny}
-          />
-        </div>
+        <HSharesTable
+          holdings={displayReport.hShares.holdings}
+          quotes={quotes}
+          live={live}
+          hkdCny={hkdCny}
+        />
 
         <FooterSummary
           auditedBy={displayReport.audit?.by}
