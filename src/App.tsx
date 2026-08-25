@@ -121,8 +121,9 @@ function App() {
   }
   if (!data || !report || !displayReport) {
     return (
-      <div className="flex min-h-screen items-center justify-center text-slate-400">
-        加载中…
+      <div className="flex min-h-screen flex-col items-center justify-center gap-3 text-rose-400">
+        <div className="h-10 w-10 animate-spin rounded-full border-4 border-rose-200 border-t-rose-500" />
+        <div className="text-sm">月报加载中…</div>
       </div>
     );
   }

@@ -44,6 +44,12 @@ export function Header({
   const timeStr = lastUpdated
     ? lastUpdated.toLocaleTimeString("zh-CN", { hour12: false })
     : "";
+  const todayStr = new Date().toLocaleDateString("zh-CN", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    weekday: "long",
+  });
 
   return (
     <header className="relative overflow-hidden bg-gradient-to-br from-rose-100 via-rose-50 to-rose-100 text-rose-900">
@@ -66,7 +72,10 @@ export function Header({
                   </span>
                 )}
               </div>
-              <p className="text-xs text-rose-500">{data.subtitle}</p>
+              <p className="text-xs text-rose-500">
+                {data.subtitle ? `${data.subtitle} · ` : ""}
+                {todayStr}
+              </p>
             </div>
           </div>
 
@@ -124,7 +133,7 @@ export function Header({
         <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
             <div className="text-[11px] text-rose-400">账户总资产（CNY）</div>
-            <div className="mt-0.5 font-mono text-2xl font-bold tabular-nums tracking-tight md:text-3xl">
+            <div className="mt-0.5 bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 bg-clip-text font-mono text-2xl font-bold tabular-nums tracking-tight text-transparent md:text-3xl">
               ¥{fmtMoney(summary.totalAssets)}
             </div>
             <div className="mt-0.5 text-[11px] text-rose-400">
