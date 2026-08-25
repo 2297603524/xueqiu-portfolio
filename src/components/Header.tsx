@@ -46,16 +46,16 @@ export function Header({
     : "";
 
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-slate-900 via-slate-900 to-indigo-950 text-white">
-      {/* 装饰光晕 */}
-      <div className="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-indigo-500/20 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-rose-500/10 blur-3xl" />
+    <header className="relative overflow-hidden bg-gradient-to-br from-rose-950 via-red-900 to-rose-950 text-white">
+      {/* 装饰光晕（红色主题） */}
+      <div className="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-red-500/25 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-orange-500/10 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl px-4 pt-8 pb-6">
         {/* 顶行：标题 + 实时开关 */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-orange-500 text-lg font-bold shadow-lg shadow-rose-500/30">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-orange-500 text-lg font-bold shadow-lg shadow-red-500/30">
               鹿
             </div>
             <div>

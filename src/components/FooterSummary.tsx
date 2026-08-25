@@ -45,7 +45,7 @@ export function FooterSummary({
           label="账户总资产"
           value={fmtMoney(totalAssets)}
           subtle="CNY"
-          accent="from-indigo-500 to-blue-400"
+          accent="from-red-500 to-rose-400"
           highlight
         />
         <StatCard
@@ -142,7 +142,7 @@ function StatCard({
   return (
     <div
       className={`relative overflow-hidden rounded-2xl border bg-white p-4 shadow-sm transition hover:shadow-md ${
-        highlight ? "border-indigo-200 ring-1 ring-indigo-100" : "border-slate-200/80"
+        highlight ? "border-rose-200 ring-1 ring-rose-100" : "border-slate-200/80"
       }`}
     >
       {/* 顶部渐变细条 */}
