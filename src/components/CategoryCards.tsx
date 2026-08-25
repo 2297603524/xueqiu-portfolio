@@ -120,14 +120,14 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
                 <span className="text-[11px] text-rose-400">{c.count} 只</span>
               </div>
 
-              {/* 股票列表（最多显示 2 只示例）/ 空状态 */}
+              {/* 股票列表（全部显示，紧凑样式）/ 空状态 */}
               {empty ? (
                 <div className="mt-2 rounded-md border border-dashed border-rose-200 py-1.5 text-center text-[11px] text-rose-300">
                   本月无{style.tag}记录
                 </div>
               ) : (
                 <ul className="mt-2 space-y-1">
-                  {sortedStocks.slice(0, 2).map((s) => (
+                  {sortedStocks.map((s) => (
                     <li
                       key={s.code}
                       className="flex items-baseline justify-between gap-2 text-xs"
@@ -144,11 +144,6 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
                       </span>
                     </li>
                   ))}
-                  {sortedStocks.length > 2 && (
-                    <li className="text-[11px] text-rose-400">
-                      … 等 {sortedStocks.length - 2} 只，详见下表
-                    </li>
-                  )}
                 </ul>
               )}
             </div>
