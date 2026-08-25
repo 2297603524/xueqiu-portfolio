@@ -7,6 +7,9 @@ interface FooterSummaryProps {
   availableCash: number;
   cashRatio: number;
   auditedBy?: string;
+  estimated?: boolean;
+  live?: boolean;
+  hkdCny: number;
 }
 
 export function FooterSummary({
@@ -16,52 +19,79 @@ export function FooterSummary({
   availableCash,
   cashRatio,
   auditedBy,
+  estimated,
+  live,
+  hkdCny,
 }: FooterSummaryProps) {
   return (
-    <section className="mx-auto mt-6 max-w-6xl px-4 pb-12">
+    <section className="mx-auto mt-6 max-w-6xl px-4 pb-12 fade-in-up">
+      {/* 统计卡 */}
       <div className="grid grid-cols-2 gap-3 md:grid-cols-5">
-        <StatCard label="A 股持仓" value={fmtMoney(aShareValue)} subtle="CNY" />
-        <StatCard label="H 股持仓" value={fmtMoney(hShareValueCNY)} subtle="CNY" />
         <StatCard
-          label="A 股账户总资产"
+          label="A 股持仓"
+          value={fmtMoney(aShareValue)}
+          subtle="CNY"
+          accent="from-rose-500 to-orange-400"
+        />
+        <StatCard
+          label="H 股持仓"
+          value={fmtMoney(hShareValueCNY)}
+          subtle={`CNY · 汇率 ${hkdCny.toFixed(4)}`}
+          accent="from-sky-500 to-cyan-400"
+        />
+        <StatCard
+          label="账户总资产"
           value={fmtMoney(totalAssets)}
           subtle="CNY"
+          accent="from-indigo-500 to-blue-400"
           highlight
         />
         <StatCard
           label="资金余额"
           value={fmtMoney(availableCash)}
           subtle="CNY"
+          accent="from-slate-500 to-slate-400"
         />
         <StatCard
           label="现金仓位"
           value={fmtPercent(cashRatio, 2)}
           subtle="占账户总资产"
+          accent="from-emerald-500 to-green-400"
           valueClass={
-            cashRatio < 0.05 ? "text-down" : cashRatio < 0.2 ? "text-ink-900" : "text-up"
+            cashRatio < 0.05 ? "text-emerald-600" : cashRatio < 0.2 ? "text-slate-900" : "text-rose-600"
           }
         />
       </div>
 
-      {/* 数据质量卡 */}
-      {auditedBy && (
-        <div className="mt-4 flex items-center gap-2 rounded-md border border-emerald-200 bg-emerald-50 px-4 py-2.5 text-sm text-emerald-700">
-          <svg
-            viewBox="0 0 20 20"
-            fill="currentColor"
-            className="h-4 w-4 flex-shrink-0"
-          >
-            <path
-              fillRule="evenodd"
-              d="M16.704 5.29a1 1 0 010 1.42l-7.5 7.5a1 1 0 01-1.42 0l-3.5-3.5a1 1 0 111.42-1.42l2.79 2.79 6.79-6.79a1 1 0 011.42 0z"
-              clipRule="evenodd"
-            />
-          </svg>
-          <span className="font-medium">{auditedBy}</span>
-        </div>
-      )}
+      {/* 数据说明 */}
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-xl border border-slate-200/80 bg-white px-4 py-2.5 text-[11px] text-slate-500 shadow-sm">
+        <span className="flex items-center gap-1.5">
+          <span
+            className={`h-1.5 w-1.5 rounded-full ${
+              live ? "bg-emerald-500 live-dot" : "bg-slate-300"
+            }`}
+          />
+          {live ? "行情实时刷新中（3 秒/次）" : "当前为静态快照数据"}
+        </span>
+        <span>·</span>
+        <span>涨跌颜色遵循中国股市惯例（红涨绿跌）</span>
+        {estimated && (
+          <>
+            <span>·</span>
+            <span className="font-medium text-amber-600">
+              本月份为估算数据，待真实月报覆盖
+            </span>
+          </>
+        )}
+        {auditedBy && (
+          <>
+            <span>·</span>
+            <span className="text-emerald-600">✔ {auditedBy}</span>
+          </>
+        )}
+      </div>
 
-      <p className="mt-4 text-center text-xs text-ink-500">
+      <p className="mt-4 text-center text-xs text-slate-400">
         数据来源：雪球 @超级鹿鼎公 · 仅供学习参考，不构成投资建议
       </p>
     </section>
@@ -73,27 +103,31 @@ function StatCard({
   value,
   subtle,
   highlight,
-  valueClass = "text-ink-900",
+  valueClass = "text-slate-900",
+  accent,
 }: {
   label: string;
   value: string;
   subtle?: string;
   highlight?: boolean;
   valueClass?: string;
+  accent: string;
 }) {
   return (
     <div
-      className={`rounded-lg border bg-white p-4 shadow-sm ${
-        highlight ? "border-up/40 ring-1 ring-up/20" : "border-ink-200"
+      className={`relative overflow-hidden rounded-2xl border bg-white p-4 shadow-sm transition hover:shadow-md ${
+        highlight ? "border-indigo-200 ring-1 ring-indigo-100" : "border-slate-200/80"
       }`}
     >
-      <div className="text-xs text-ink-500">{label}</div>
+      {/* 顶部渐变细条 */}
+      <div className={`absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r ${accent}`} />
+      <div className="text-xs text-slate-500">{label}</div>
       <div
-        className={`mt-1 font-mono text-lg font-semibold tabular-nums ${valueClass}`}
+        className={`mt-1.5 font-mono text-lg font-bold tabular-nums ${valueClass}`}
       >
         {value}
       </div>
-      {subtle && <div className="mt-0.5 text-[11px] text-ink-500">{subtle}</div>}
+      {subtle && <div className="mt-0.5 text-[11px] text-slate-400">{subtle}</div>}
     </div>
   );
 }
