@@ -90,3 +90,19 @@ body,
 .month-scroll::-webkit-scrollbar {
   display: none;
 }
+
+/* 浅红主题滚动条 */
+*::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+*::-webkit-scrollbar-track {
+  background: transparent;
+}
+*::-webkit-scrollbar-thumb {
+  background: #fda4af; /* rose-300 */
+  border-radius: 4px;
+}
+*::-webkit-scrollbar-thumb:hover {
+  background: #fb7185; /* rose-400 */
+}

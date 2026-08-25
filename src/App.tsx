@@ -150,17 +150,20 @@ function App() {
         estimated={estimated}
       />
 
-      <div className="mx-auto max-w-6xl px-4">
+      <div className="mx-auto max-w-7xl px-4">
         <CategoryCards categories={displayReport.categories} />
 
-        <ASharesTable holdings={displayReport.aShares.holdings} quotes={quotes} live={live} />
+        {/* 大屏 A/H 表格并排双列 */}
+        <div className="grid items-start gap-4 xl:grid-cols-2">
+          <ASharesTable holdings={displayReport.aShares.holdings} quotes={quotes} live={live} />
 
-        <HSharesTable
-          holdings={displayReport.hShares.holdings}
-          quotes={quotes}
-          live={live}
-          hkdCny={hkdCny}
-        />
+          <HSharesTable
+            holdings={displayReport.hShares.holdings}
+            quotes={quotes}
+            live={live}
+            hkdCny={hkdCny}
+          />
+        </div>
 
         <FooterSummary
           auditedBy={displayReport.audit?.by}

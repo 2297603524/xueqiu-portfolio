@@ -136,8 +136,14 @@ export function Header({
             <div className="mt-0.5 bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 bg-clip-text font-mono text-2xl font-bold tabular-nums tracking-tight text-transparent md:text-3xl">
               ¥{fmtMoney(summary.totalAssets)}
             </div>
-            <div className="mt-0.5 text-[11px] text-rose-400">
-              可用现金 ¥{fmtInt(summary.availableCash)} · 现金仓位{" "}
+            <div className="mt-0.5 flex items-center gap-1.5 text-[11px] text-rose-400">
+              可用现金 ¥{fmtInt(summary.availableCash)} · 现金仓位
+              <div className="h-1.5 w-14 overflow-hidden rounded-full bg-rose-200/70">
+                <div
+                  className="h-full rounded-full bg-gradient-to-r from-emerald-400 to-emerald-500"
+                  style={{ width: `${Math.min(summary.cashRatio, 1) * 100}%` }}
+                />
+              </div>
               {fmtPercent(summary.cashRatio, 1)}
             </div>
           </div>
