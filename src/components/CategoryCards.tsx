@@ -105,7 +105,7 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
             {/* 顶部渐变条 */}
             <div className={`h-1 w-full bg-gradient-to-r ${style.iconBg}`} />
 
-            <div className="p-4">
+            <div className="p-3">
               {/* 标签 + 数量 */}
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-2">
@@ -123,11 +123,11 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
 
               {/* 股票列表 / 空状态 */}
               {empty ? (
-                <div className="mt-4 rounded-lg border border-dashed border-rose-200 py-5 text-center text-xs text-rose-300">
+                <div className="mt-4 rounded-lg border border-dashed border-rose-200 py-3 text-center text-xs text-rose-300">
                   本月无{style.tag}记录
                 </div>
               ) : (
-                <ul className="mt-3.5 space-y-2.5">
+                <ul className="mt-2.5 space-y-1.5">
                   {sortedStocks.map((s) => {
                     const isLargest = s.name === largestName;
                     return (

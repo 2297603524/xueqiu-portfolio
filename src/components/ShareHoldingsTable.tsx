@@ -170,7 +170,7 @@ function SectionTitle({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3.5 sm:px-5">
+    <div className="flex items-center justify-between border-b border-rose-100 px-4 py-2.5 sm:px-5">
       <div className="flex items-center gap-2">
         <span
           className={`rounded-md px-1.5 py-0.5 text-xs font-bold ${badgeCls}`}
@@ -194,7 +194,7 @@ interface SharesTableProps {
 
 export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
   return (
-    <section className="mx-auto mt-6 max-w-6xl px-4 fade-in-up">
+    <section className="mx-auto mt-4 max-w-6xl px-4 fade-in-up">
       <div className="overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/40">
         <SectionTitle
           badge="A 股"
@@ -374,7 +374,7 @@ interface HSharesTableProps {
 
 export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTableProps) {
   return (
-    <section className="mx-auto mt-6 max-w-6xl px-4 fade-in-up">
+    <section className="mx-auto mt-4 max-w-6xl px-4 fade-in-up">
       <div className="overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/40">
         <SectionTitle
           badge="H 股"
@@ -571,7 +571,7 @@ function Th({
 }) {
   return (
     <th
-      className={`px-3 py-2.5 font-medium text-left tracking-wide whitespace-nowrap ${className}`}
+      className={`px-3 py-2 font-medium text-left tracking-wide whitespace-nowrap ${className}`}
     >
       {children}
     </th>
@@ -586,7 +586,7 @@ function Td({
   className?: string;
 }) {
   return (
-    <td className={`px-3 py-2.5 align-middle whitespace-nowrap ${className}`}>
+    <td className={`px-3 py-1.5 align-middle whitespace-nowrap ${className}`}>
       {children}
     </td>
   );

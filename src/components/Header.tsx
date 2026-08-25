@@ -51,7 +51,7 @@ export function Header({
       <div className="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-rose-300/40 blur-3xl" />
       <div className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-orange-200/50 blur-3xl" />
 
-      <div className="relative mx-auto max-w-6xl px-4 pt-8 pb-6">
+      <div className="relative mx-auto max-w-6xl px-4 pt-5 pb-4">
         {/* 顶行：标题 + 实时开关 */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
@@ -121,38 +121,38 @@ export function Header({
         )}
 
         {/* 核心数字区 */}
-        <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
+        <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
-            <div className="text-xs text-rose-400">账户总资产（CNY）</div>
-            <div className="mt-1 font-mono text-3xl font-bold tabular-nums tracking-tight md:text-4xl">
+            <div className="text-[11px] text-rose-400">账户总资产（CNY）</div>
+            <div className="mt-0.5 font-mono text-2xl font-bold tabular-nums tracking-tight md:text-3xl">
               ¥{fmtMoney(summary.totalAssets)}
             </div>
-            <div className="mt-1 text-[11px] text-rose-400">
+            <div className="mt-0.5 text-[11px] text-rose-400">
               可用现金 ¥{fmtInt(summary.availableCash)} · 现金仓位{" "}
               {fmtPercent(summary.cashRatio, 1)}
             </div>
           </div>
 
           <div>
-            <div className="text-xs text-rose-400">A 股持仓</div>
-            <div className="mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl">
+            <div className="text-[11px] text-rose-400">A 股持仓</div>
+            <div className="mt-0.5 font-mono text-lg font-semibold tabular-nums md:text-xl">
               ¥{fmtMoney(aShareValue)}
             </div>
-            <div className="mt-1 text-[11px] text-rose-400">沪 / 深</div>
+            <div className="mt-0.5 text-[11px] text-rose-400">沪 / 深</div>
           </div>
 
           <div>
-            <div className="text-xs text-rose-400">H 股持仓（折 CNY）</div>
-            <div className="mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl">
+            <div className="text-[11px] text-rose-400">H 股持仓（折 CNY）</div>
+            <div className="mt-0.5 font-mono text-lg font-semibold tabular-nums md:text-xl">
               ¥{fmtMoney(hShareValueCNY)}
             </div>
-            <div className="mt-1 text-[11px] text-rose-400">港股</div>
+            <div className="mt-0.5 text-[11px] text-rose-400">港股</div>
           </div>
 
           <div>
-            <div className="text-xs text-rose-400">持仓总盈亏</div>
+            <div className="text-[11px] text-rose-400">持仓总盈亏</div>
             <div
-              className={`mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl ${
+              className={`mt-0.5 font-mono text-lg font-semibold tabular-nums md:text-xl ${
                 totalProfit === null
                   ? "text-rose-300"
                   : totalProfit > 0
@@ -168,21 +168,21 @@ export function Header({
                 ? `+${fmtMoney(totalProfit)}`
                 : fmtMoney(totalProfit)}
             </div>
-            <div className="mt-1 text-[11px] text-rose-400">
+            <div className="mt-0.5 text-[11px] text-rose-400">
               {totalProfit === null ? "历史月份不计算" : "按最新行情计算"}
             </div>
           </div>
 
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xs text-rose-400">当日盈亏</span>
+              <span className="text-[11px] text-rose-400">当日盈亏</span>
               {dailyPL !== null && live && (
                 <span className="inline-block h-1.5 w-1.5 rounded-full bg-rose-400 live-dot" title="实时刷新中" />
               )}
             </div>
             <div
               key={dailyPL ?? 0}
-              className={`mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl ${
+              className={`mt-0.5 font-mono text-lg font-semibold tabular-nums md:text-xl ${
                 dailyPL === null
                   ? "text-rose-300"
                   : dailyPL > 0
@@ -198,7 +198,7 @@ export function Header({
                 ? `+${fmtMoney(dailyPL)}`
                 : fmtMoney(dailyPL)}
             </div>
-            <div className="mt-1 text-[11px] text-rose-400">
+            <div className="mt-0.5 text-[11px] text-rose-400">
               {dailyPL === null ? "需开启实时" : "相对昨收 · 实时"}
             </div>
           </div>
@@ -235,7 +235,7 @@ export function Header({
             })}
           </div>
         ) : (
-          <div className="mt-5 flex items-center gap-2">
+          <div className="mt-3 flex items-center gap-2">
             <span className="flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
               {history[0].label}
               {history[0].audit?.estimated && (

@@ -162,16 +162,10 @@ function App() {
         />
 
         <FooterSummary
-          aShareValue={displayReport.aShares.marketValue}
-          hShareValueCNY={displayReport.hShares.marketValueCNY}
-          totalAssets={displayReport.summary.totalAssets}
-          availableCash={displayReport.summary.availableCash}
-          cashRatio={displayReport.summary.cashRatio}
           auditedBy={displayReport.audit?.by}
           estimated={estimated}
           live={live}
           hkdCny={hkdCny}
-          dailyPL={dailyPL}
         />
       </div>
     </main>
