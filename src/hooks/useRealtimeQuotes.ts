@@ -1,31 +1,37 @@
-import { useEffect, useState } from "react";
-import { fetchQuotes } from "../lib/realtime";
+import { useEffect, useRef, useState } from "react";
+import { fetchQuotes, fetchHkdCny, type Quote } from "../lib/realtime";
 
 /**
- * 实时行情 Hook：按固定间隔（默认 1s）通过 JSONP 拉取一批股票的最新价
+ * 实时行情 Hook：按固定间隔（默认 3s）通过 JSONP 拉取一批股票的最新价
+ * - 自动重试：单次失败不会中断，连续失败时 live=false
+ * - 实时汇率：HKD/CNY 优先实时（新浪），失败兜底 0.92
  * @param aCodes A 股代码列表（如 ["600900.SH"]）
  * @param hCodes H 股代码列表（如 ["01898.HK"]）
  * @param enabled 是否启用（仅最新月份启用，历史月份保持静态）
- * @param intervalMs 刷新间隔，默认 1000ms
+ * @param intervalMs 刷新间隔，默认 3000ms
  */
 export function useRealtimeQuotes(
   aCodes: string[],
   hCodes: string[],
   enabled: boolean,
-  intervalMs = 1000
+  intervalMs = 3000
 ) {
-  const [prices, setPrices] = useState<Map<string, number> | null>(null);
+  const [quotes, setQuotes] = useState<Map<string, Quote> | null>(null);
+  const [hkdCny, setHkdCny] = useState<number | null>(null);
   const [error, setError] = useState<string | null>(null);
-
-  // H 股换算汇率：与历史快照口径一致（近似 0.92），避免依赖实时汇率接口
-  const hkdCny = 0.92;
+  const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const [consecutiveFail, setConsecutiveFail] = useState(0);
+  const hkdCnyRef = useRef<number | null>(null);
 
   const aKey = aCodes.join(",");
   const hKey = hCodes.join(",");
 
   useEffect(() => {
     if (!enabled) {
-      setPrices(null);
+      setQuotes(null);
+      setError(null);
+      setLastUpdated(null);
+      setConsecutiveFail(0);
       return;
     }
     const all = [...aCodes, ...hCodes];
@@ -36,13 +42,26 @@ export function useRealtimeQuotes(
 
     const tick = async () => {
       try {
-        const m = await fetchQuotes(all);
-        if (!disposed) {
-          setPrices(m);
-          if (error) setError(null);
+        const [q, hkd] = await Promise.all([
+          fetchQuotes(all),
+          hkdCnyRef.current === null ? fetchHkdCny() : Promise.resolve(null),
+        ]);
+        if (disposed) return;
+        setQuotes(q);
+        if (hkd !== null) {
+          hkdCnyRef.current = hkd;
+          setHkdCny(hkd);
         }
+        setLastUpdated(new Date());
+        setConsecutiveFail(0);
+        setError(null);
       } catch (e) {
-        if (!disposed) setError(String(e instanceof Error ? e.message : e));
+        if (disposed) return;
+        setConsecutiveFail((c) => {
+          const n = c + 1;
+          if (n >= 3) setError("连续多次获取行情失败，已显示最近一次行情");
+          return n;
+        });
       }
     };
 
@@ -55,5 +74,12 @@ export function useRealtimeQuotes(
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [enabled, aKey, hKey, intervalMs]);
 
-  return { prices, hkdCny, error, live: enabled && !!prices };
+  return {
+    quotes,
+    hkdCny: hkdCny ?? 0.92, // 兜底汇率
+    error,
+    live: enabled && quotes !== null && consecutiveFail < 3,
+    lastUpdated,
+    consecutiveFail,
+  };
 }
