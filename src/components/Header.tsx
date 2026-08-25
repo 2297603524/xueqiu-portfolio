@@ -149,40 +149,6 @@ export function Header({
               </div>
               {fmtPercent(summary.cashRatio, 1)}
             </div>
-            {monthlyPL?.profit != null && (
-              <div className="mt-0.5 flex items-center gap-1.5 text-[11px]">
-                <span className="text-rose-400">本月盈亏</span>
-                <span
-                  className={`font-mono font-semibold tabular-nums ${
-                    monthlyPL.profit > 0
-                      ? "text-rose-600"
-                      : monthlyPL.profit < 0
-                      ? "text-emerald-600"
-                      : "text-rose-500"
-                  }`}
-                >
-                  {monthlyPL.profit > 0 ? "+" : ""}
-                  {fmtMoney(monthlyPL.profit)}
-                </span>
-                {monthlyPL.ratio != null && (
-                  <span
-                    className={`font-mono tabular-nums ${
-                      monthlyPL.ratio > 0
-                        ? "text-rose-600"
-                        : monthlyPL.ratio < 0
-                        ? "text-emerald-600"
-                        : "text-rose-500"
-                    }`}
-                  >
-                    （{monthlyPL.ratio > 0 ? "+" : ""}
-                    {fmtPercent(Math.abs(monthlyPL.ratio), 2)}）
-                  </span>
-                )}
-                {monthlyPL.note && (
-                  <span className="text-rose-300">· {monthlyPL.note}</span>
-                )}
-              </div>
-            )}
           </div>
 
           <div>
@@ -255,6 +221,36 @@ export function Header({
             </div>
           </div>
         </div>
+
+        {/* 月度盈亏徽章行 */}
+        {monthlyPL?.profit != null && (
+          <div className="mt-3 flex flex-wrap items-center gap-2">
+            <span
+              className={`inline-flex items-center gap-2 rounded-full border px-3 py-1 text-xs shadow-sm ${
+                monthlyPL.profit > 0
+                  ? "border-rose-200 bg-white/80 text-rose-600"
+                  : monthlyPL.profit < 0
+                  ? "border-emerald-200 bg-white/80 text-emerald-600"
+                  : "border-rose-200 bg-white/80 text-rose-500"
+              }`}
+            >
+              <span className="font-medium">本月盈亏</span>
+              <span className="font-mono text-sm font-bold tabular-nums">
+                {monthlyPL.profit > 0 ? "+" : ""}
+                {fmtMoney(monthlyPL.profit)}
+              </span>
+              {monthlyPL.ratio != null && (
+                <span className="font-mono tabular-nums opacity-80">
+                  {monthlyPL.ratio > 0 ? "+" : ""}
+                  {fmtPercent(Math.abs(monthlyPL.ratio), 2)}
+                </span>
+              )}
+            </span>
+            {monthlyPL.note && (
+              <span className="text-[11px] text-rose-400">{monthlyPL.note}</span>
+            )}
+          </div>
+        )}
 
         {/* 月份区：多月份时显示可切换 tabs；单月份时静态显示当前持仓月份 */}
         {history.length > 1 ? (
