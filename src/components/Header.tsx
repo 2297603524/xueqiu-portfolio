@@ -207,8 +207,8 @@ export function Header({
           </div>
         </div>
 
-        {/* 月份切换 tabs（仅在有多个月份时显示） */}
-        {history.length > 1 && (
+        {/* 月份区：多月份时显示可切换 tabs；单月份时静态显示当前持仓月份 */}
+        {history.length > 1 ? (
           <div className="month-scroll mt-6 -mx-4 flex gap-1.5 overflow-x-auto px-4 pb-1">
             {history.map((h) => {
               const active = h.month === activeMonth;
@@ -236,6 +236,19 @@ export function Header({
                 </button>
               );
             })}
+          </div>
+        ) : (
+          <div className="mt-5 flex items-center gap-2">
+            <span className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-slate-100 ring-1 ring-white/15">
+              {history[0].label}
+              {history[0].audit?.estimated && (
+                <span
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"
+                  title="估算数据"
+                />
+              )}
+            </span>
+            <span className="text-xs text-slate-500">当前持仓月份</span>
           </div>
         )}
       </div>
