@@ -5,7 +5,7 @@
 html,
 body,
 #root {
-  background: #f5f6f8;
+  background: #f1f5f9;
   color: #0f172a;
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
@@ -21,4 +21,72 @@ body,
 /* 表格斑马纹 */
 .table-zebra > tbody > tr:nth-child(odd) {
   background: #fafbfc;
+}
+
+/* ---------- 实时行情闪动动画（中国惯例：涨=红，跌=绿） ---------- */
+@keyframes flash-up {
+  0% {
+    background-color: rgba(225, 29, 72, 0.22);
+    color: #e11d48;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+@keyframes flash-down {
+  0% {
+    background-color: rgba(22, 163, 74, 0.22);
+    color: #16a34a;
+  }
+  100% {
+    background-color: transparent;
+  }
+}
+.flash-up {
+  animation: flash-up 1s ease-out;
+  border-radius: 4px;
+}
+.flash-down {
+  animation: flash-down 1s ease-out;
+  border-radius: 4px;
+}
+
+/* 页面内容淡入 */
+@keyframes fade-in-up {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fade-in-up {
+  animation: fade-in-up 0.45s ease-out both;
+}
+
+/* 实时状态圆点呼吸 */
+@keyframes breathe {
+  0%,
+  100% {
+    opacity: 1;
+    box-shadow: 0 0 0 0 rgba(52, 211, 153, 0.6);
+  }
+  50% {
+    opacity: 0.85;
+    box-shadow: 0 0 0 6px rgba(52, 211, 153, 0);
+  }
+}
+.live-dot {
+  animation: breathe 2s ease-in-out infinite;
+}
+
+/* 月份 tab 横向滚动条隐藏（移动端） */
+.month-scroll {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.month-scroll::-webkit-scrollbar {
+  display: none;
 }
