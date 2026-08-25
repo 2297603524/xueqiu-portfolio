@@ -46,16 +46,16 @@ export function Header({
     : "";
 
   return (
-    <header className="relative overflow-hidden bg-gradient-to-br from-rose-950 via-red-900 to-rose-950 text-white">
-      {/* 装饰光晕（红色主题） */}
-      <div className="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-red-500/25 blur-3xl" />
-      <div className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-orange-500/10 blur-3xl" />
+    <header className="relative overflow-hidden bg-gradient-to-br from-rose-100 via-rose-50 to-rose-100 text-rose-900">
+      {/* 装饰光晕（浅红） */}
+      <div className="pointer-events-none absolute -top-32 -right-24 h-96 w-96 rounded-full bg-rose-300/40 blur-3xl" />
+      <div className="pointer-events-none absolute -bottom-40 -left-24 h-96 w-96 rounded-full bg-orange-200/50 blur-3xl" />
 
       <div className="relative mx-auto max-w-6xl px-4 pt-8 pb-6">
         {/* 顶行：标题 + 实时开关 */}
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div className="flex items-center gap-2.5">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-red-500 to-orange-500 text-lg font-bold shadow-lg shadow-red-500/30">
+            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-gradient-to-br from-rose-500 to-orange-500 text-lg font-bold text-white shadow-lg shadow-rose-300">
               鹿
             </div>
             <div>
@@ -64,12 +64,12 @@ export function Header({
                   {data.title}
                 </h1>
                 {estimated && (
-                  <span className="rounded-full bg-amber-400/20 px-2 py-0.5 text-[11px] font-medium text-amber-300 ring-1 ring-amber-400/40">
+                  <span className="rounded-full bg-amber-100 px-2 py-0.5 text-[11px] font-medium text-amber-700 ring-1 ring-amber-300">
                     估算数据
                   </span>
                 )}
               </div>
-              <p className="text-xs text-slate-400">{data.subtitle}</p>
+              <p className="text-xs text-rose-500">{data.subtitle}</p>
             </div>
           </div>
 
@@ -80,16 +80,16 @@ export function Header({
                 type="button"
                 onClick={onToggleRealtime}
                 title="点击暂停实时刷新"
-                className="flex items-center gap-2 rounded-full border border-emerald-400/30 bg-emerald-500/10 px-3 py-1.5 text-xs text-emerald-300 backdrop-blur transition hover:bg-emerald-500/20"
+                className="flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-700 transition hover:bg-emerald-100"
               >
                 <span
                   className={`live-dot h-2 w-2 rounded-full ${
-                    live ? "bg-emerald-400" : "bg-slate-400"
+                    live ? "bg-emerald-500" : "bg-slate-300"
                   }`}
                 />
                 {live ? "实时行情 · 3s" : "连接中…"}
                 {live && timeStr && (
-                  <span className="hidden text-emerald-400/70 sm:inline">
+                  <span className="hidden text-emerald-600/70 sm:inline">
                     {timeStr} 更新
                   </span>
                 )}
@@ -100,9 +100,9 @@ export function Header({
                 type="button"
                 onClick={onToggleRealtime}
                 title="点击开启实时刷新"
-                className="flex items-center gap-2 rounded-full border border-slate-500/40 bg-slate-500/10 px-3 py-1.5 text-xs text-slate-300 backdrop-blur transition hover:bg-slate-500/20"
+                className="flex items-center gap-2 rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs text-rose-500 transition hover:bg-rose-50"
               >
-                <span className="h-2 w-2 rounded-full bg-slate-400" />
+                <span className="h-2 w-2 rounded-full bg-rose-300" />
                 静态数据 · 点击开启实时
               </button>
             )}
@@ -111,7 +111,7 @@ export function Header({
 
         {/* 实时行情错误提示 */}
         {realtimeOn && realtimeError && (
-          <div className="mt-3 flex items-center gap-2 rounded-lg border border-amber-400/30 bg-amber-500/10 px-3 py-2 text-xs text-amber-300">
+          <div className="mt-3 flex items-center gap-2 rounded-lg border border-amber-200 bg-amber-50 px-3 py-2 text-xs text-amber-700">
             <svg viewBox="0 0 20 20" fill="currentColor" className="h-4 w-4 shrink-0">
               <path
                 fillRule="evenodd"
@@ -126,43 +126,43 @@ export function Header({
         {/* 核心数字区 */}
         <div className="mt-6 grid grid-cols-2 gap-4 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
-            <div className="text-xs text-slate-400">账户总资产（CNY）</div>
+            <div className="text-xs text-rose-400">账户总资产（CNY）</div>
             <div className="mt-1 font-mono text-3xl font-bold tabular-nums tracking-tight md:text-4xl">
               ¥{fmtMoney(summary.totalAssets)}
             </div>
-            <div className="mt-1 text-[11px] text-slate-500">
+            <div className="mt-1 text-[11px] text-rose-400">
               可用现金 ¥{fmtInt(summary.availableCash)} · 现金仓位{" "}
               {fmtPercent(summary.cashRatio, 1)}
             </div>
           </div>
 
           <div>
-            <div className="text-xs text-slate-400">A 股持仓</div>
+            <div className="text-xs text-rose-400">A 股持仓</div>
             <div className="mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl">
               ¥{fmtMoney(aShareValue)}
             </div>
-            <div className="mt-1 text-[11px] text-slate-500">沪 / 深</div>
+            <div className="mt-1 text-[11px] text-rose-400">沪 / 深</div>
           </div>
 
           <div>
-            <div className="text-xs text-slate-400">H 股持仓（折 CNY）</div>
+            <div className="text-xs text-rose-400">H 股持仓（折 CNY）</div>
             <div className="mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl">
               ¥{fmtMoney(hShareValueCNY)}
             </div>
-            <div className="mt-1 text-[11px] text-slate-500">港股</div>
+            <div className="mt-1 text-[11px] text-rose-400">港股</div>
           </div>
 
           <div>
-            <div className="text-xs text-slate-400">持仓总盈亏</div>
+            <div className="text-xs text-rose-400">持仓总盈亏</div>
             <div
               className={`mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl ${
                 totalProfit === null
-                  ? "text-slate-500"
+                  ? "text-rose-300"
                   : totalProfit > 0
-                  ? "text-rose-400"
+                  ? "text-rose-600"
                   : totalProfit < 0
-                  ? "text-emerald-400"
-                  : "text-slate-200"
+                  ? "text-emerald-600"
+                  : "text-rose-500"
               }`}
             >
               {totalProfit === null
@@ -171,28 +171,28 @@ export function Header({
                 ? `+${fmtMoney(totalProfit)}`
                 : fmtMoney(totalProfit)}
             </div>
-            <div className="mt-1 text-[11px] text-slate-500">
+            <div className="mt-1 text-[11px] text-rose-400">
               {totalProfit === null ? "历史月份不计算" : "按最新行情计算"}
             </div>
           </div>
 
           <div>
             <div className="flex items-baseline gap-1.5">
-              <span className="text-xs text-slate-400">当日盈亏</span>
+              <span className="text-xs text-rose-400">当日盈亏</span>
               {dailyPL !== null && live && (
-                <span className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400 live-dot" title="实时刷新中" />
+                <span className="inline-block h-1.5 w-1.5 rounded-full bg-rose-400 live-dot" title="实时刷新中" />
               )}
             </div>
             <div
               key={dailyPL ?? 0}
               className={`mt-1 font-mono text-xl font-semibold tabular-nums md:text-2xl ${
                 dailyPL === null
-                  ? "text-slate-500"
+                  ? "text-rose-300"
                   : dailyPL > 0
-                  ? "text-rose-400 flash-up"
+                  ? "text-rose-600 flash-up"
                   : dailyPL < 0
-                  ? "text-emerald-400 flash-down"
-                  : "text-slate-200"
+                  ? "text-emerald-600 flash-down"
+                  : "text-rose-500"
               }`}
             >
               {dailyPL === null
@@ -201,7 +201,7 @@ export function Header({
                 ? `+${fmtMoney(dailyPL)}`
                 : fmtMoney(dailyPL)}
             </div>
-            <div className="mt-1 text-[11px] text-slate-500">
+            <div className="mt-1 text-[11px] text-rose-400">
               {dailyPL === null ? "需开启实时" : "相对昨收 · 实时"}
             </div>
           </div>
@@ -220,8 +220,8 @@ export function Header({
                   onClick={() => onMonthChange(h.month)}
                   className={`relative shrink-0 rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap transition ${
                     active
-                      ? "bg-white font-semibold text-slate-900 shadow-md"
-                      : "bg-white/5 text-slate-300 ring-1 ring-white/10 hover:bg-white/10"
+                      ? "bg-white font-semibold text-rose-700 shadow-md shadow-rose-200"
+                      : "bg-white/60 text-rose-500 ring-1 ring-rose-200 hover:bg-white"
                   }`}
                 >
                   {h.month}
@@ -239,16 +239,16 @@ export function Header({
           </div>
         ) : (
           <div className="mt-5 flex items-center gap-2">
-            <span className="flex items-center gap-2 rounded-full bg-white/10 px-4 py-1.5 text-sm font-medium text-slate-100 ring-1 ring-white/15">
+            <span className="flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
               {history[0].label}
               {history[0].audit?.estimated && (
                 <span
-                  className="inline-block h-1.5 w-1.5 rounded-full bg-amber-400"
+                  className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"
                   title="估算数据"
                 />
               )}
             </span>
-            <span className="text-xs text-slate-500">当前持仓月份</span>
+            <span className="text-xs text-rose-400">当前持仓月份</span>
           </div>
         )}
       </div>

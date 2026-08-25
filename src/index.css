@@ -5,8 +5,8 @@
 html,
 body,
 #root {
-  background: #f1f5f9;
-  color: #0f172a;
+  background: #fff1f2; /* rose-50 浅红 */
+  color: #881337; /* rose-900 深红文字 */
   font-family: -apple-system, BlinkMacSystemFont, "PingFang SC",
     "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -18,9 +18,9 @@ body,
   font-variant-numeric: tabular-nums;
 }
 
-/* 表格斑马纹 */
+/* 表格斑马纹（极浅红） */
 .table-zebra > tbody > tr:nth-child(odd) {
-  background: #fafbfc;
+  background: #fdf6f7;
 }
 
 /* ---------- 实时行情闪动动画（中国惯例：涨=红，跌=绿） ---------- */

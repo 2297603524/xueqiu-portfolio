@@ -76,7 +76,7 @@ export function FooterSummary({
           accent="from-amber-500 to-yellow-400"
           valueClass={
             dailyPL === null
-              ? "text-slate-500"
+              ? "text-rose-500"
               : dailyPL > 0
               ? "text-rose-600"
               : dailyPL < 0
@@ -88,7 +88,7 @@ export function FooterSummary({
       </div>
 
       {/* 数据说明 */}
-      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-xl border border-slate-200/80 bg-white px-4 py-2.5 text-[11px] text-slate-500 shadow-sm">
+      <div className="mt-4 flex flex-wrap items-center gap-x-4 gap-y-1.5 rounded-xl border border-rose-200/80 bg-white px-4 py-2.5 text-[11px] text-rose-500 shadow-sm">
         <span className="flex items-center gap-1.5">
           <span
             className={`h-1.5 w-1.5 rounded-full ${
@@ -115,7 +115,7 @@ export function FooterSummary({
         )}
       </div>
 
-      <p className="mt-4 text-center text-xs text-slate-400">
+      <p className="mt-4 text-center text-xs text-rose-400">
         数据来源：雪球 @超级鹿鼎公 · 仅供学习参考，不构成投资建议
       </p>
     </section>
@@ -142,12 +142,12 @@ function StatCard({
   return (
     <div
       className={`relative overflow-hidden rounded-2xl border bg-white p-4 shadow-sm transition hover:shadow-md ${
-        highlight ? "border-rose-200 ring-1 ring-rose-100" : "border-slate-200/80"
+        highlight ? "border-rose-200 ring-1 ring-rose-100" : "border-rose-200/80"
       }`}
     >
       {/* 顶部渐变细条 */}
       <div className={`absolute inset-x-0 top-0 h-0.5 bg-gradient-to-r ${accent}`} />
-      <div className="flex items-center gap-1.5 text-xs text-slate-500">
+      <div className="flex items-center gap-1.5 text-xs text-rose-500">
         <span>{label}</span>
         {liveDot && <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 live-dot" />}
       </div>
@@ -156,7 +156,7 @@ function StatCard({
       >
         {value}
       </div>
-      {subtle && <div className="mt-0.5 text-[11px] text-slate-400">{subtle}</div>}
+      {subtle && <div className="mt-0.5 text-[11px] text-rose-400">{subtle}</div>}
     </div>
   );
 }

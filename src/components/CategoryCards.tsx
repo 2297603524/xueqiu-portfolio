@@ -99,7 +99,7 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
         return (
           <div
             key={c.type}
-            className="group relative overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm transition duration-200 hover:-translate-y-0.5 hover:shadow-lg"
+            className="group relative overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/50 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-rose-200/50"
             style={{ animationDelay: `${i * 60}ms` }}
           >
             {/* 顶部渐变条 */}
@@ -123,7 +123,7 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
 
               {/* 股票列表 / 空状态 */}
               {empty ? (
-                <div className="mt-4 rounded-lg border border-dashed border-slate-200 py-5 text-center text-xs text-slate-400">
+                <div className="mt-4 rounded-lg border border-dashed border-rose-200 py-5 text-center text-xs text-rose-300">
                   本月无{style.tag}记录
                 </div>
               ) : (

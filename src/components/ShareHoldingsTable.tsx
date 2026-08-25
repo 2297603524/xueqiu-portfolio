@@ -155,7 +155,7 @@ function SectionTitle({
   right?: React.ReactNode;
 }) {
   return (
-    <div className="flex items-center justify-between border-b border-slate-100 px-4 py-3.5 sm:px-5">
+    <div className="flex items-center justify-between border-b border-rose-100 px-4 py-3.5 sm:px-5">
       <div className="flex items-center gap-2">
         <span
           className={`rounded-md px-1.5 py-0.5 text-xs font-bold ${badgeCls}`}
@@ -180,7 +180,7 @@ interface SharesTableProps {
 export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
   return (
     <section className="mx-auto mt-6 max-w-6xl px-4 fade-in-up">
-      <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/40">
         <SectionTitle
           badge="A 股"
           badgeCls="bg-rose-50 text-rose-600"
@@ -191,7 +191,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
         {/* 桌面表格 */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm tabular-nums">
-            <thead className="bg-slate-50/80 text-xs uppercase tracking-wide text-slate-500">
+            <thead className="bg-rose-50/60 text-xs uppercase tracking-wide text-rose-500">
               <tr>
                 <Th>代码</Th>
                 <Th>名称</Th>
@@ -209,7 +209,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
               {holdings.map((h) => (
                 <tr
                   key={h.code}
-                  className="border-t border-slate-100 transition hover:bg-slate-50/70"
+                  className="border-t border-rose-100 transition hover:bg-rose-50/60"
                 >
                   <Td>
                     <span className="text-slate-500">{h.code}</span>
@@ -270,7 +270,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
         </div>
 
         {/* 移动端卡片 */}
-        <div className="md:hidden divide-y divide-slate-100">
+        <div className="md:hidden divide-y divide-rose-100">
           {holdings.map((h) => {
             const q = quotes?.get(h.code);
             return (
@@ -360,7 +360,7 @@ interface HSharesTableProps {
 export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTableProps) {
   return (
     <section className="mx-auto mt-6 max-w-6xl px-4 fade-in-up">
-      <div className="overflow-hidden rounded-2xl border border-slate-200/80 bg-white shadow-sm">
+      <div className="overflow-hidden rounded-2xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/40">
         <SectionTitle
           badge="H 股"
           badgeCls="bg-sky-50 text-sky-600"
@@ -371,7 +371,7 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
         {/* 桌面表格 */}
         <div className="hidden md:block overflow-x-auto">
           <table className="w-full text-sm tabular-nums">
-            <thead className="bg-slate-50/80 text-xs uppercase tracking-wide text-slate-500">
+            <thead className="bg-rose-50/60 text-xs uppercase tracking-wide text-rose-500">
               <tr>
                 <Th>代码</Th>
                 <Th>名称</Th>
@@ -396,7 +396,7 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                 return (
                   <tr
                     key={h.code}
-                    className="border-t border-slate-100 transition hover:bg-slate-50/70"
+                    className="border-t border-rose-100 transition hover:bg-rose-50/60"
                   >
                     <Td>
                       <span className="text-slate-500">{h.code}</span>
@@ -455,7 +455,7 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
         </div>
 
         {/* 移动端卡片 */}
-        <div className="md:hidden divide-y divide-slate-100">
+        <div className="md:hidden divide-y divide-rose-100">
           {holdings.map((h) => {
             const q = quotes?.get(h.code);
             const hkdPrice =
