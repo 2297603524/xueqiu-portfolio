@@ -87,6 +87,37 @@ xueqiu-portfolio/
 
 > 重要：GitHub Actions 只能自动刷新**价格**（现价/市值/仓位/盈亏），无法自动读取雪球月报 PS 图片里的**持仓变动明细**（新开仓/加仓/减仓/清仓的股数）。这类变动需要每月根据帖子内容手动调整 `public/data.json` 的 holdings/categories，推送后会自动重新部署。如需帮忙，让 WorkBuddy 处理即可。
 
+## 月末自动抓取当月持仓（可选）
+
+`月报-月末自动抓取持仓` Workflow 会在**每月最后一个交易日 17:00（北京时间）**自动从雪球拉取当前持仓，与上月 diff 生成当月快照（新开仓/清仓/加仓/减仓、总资产、现金），写入 `public/data.json` 并提交；提交会自动触发现有部署流程（刷新行情 → 构建 → 上线），实现全自动月报。
+
+触发机制：
+- 定时：每月 28-31 日 17:00（09:00 UTC）触发，脚本内部判定当天是否为**当月最后一个交易日**（工作日 + 内置 2026-2027 法定节假日表，非最后交易日自动跳过、零提交）
+- 手动：仓库 Actions 页面 → `月报-月末自动抓取持仓` → Run workflow（方便测试）
+
+首次使用需配置 2 个 Secrets（仓库 Settings → Secrets and variables → Actions → New repository secret）：
+
+| Secret | 说明 | 获取方法 |
+|---|---|---|
+| `XUEQIU_COOKIE` | 雪球登录 Cookie | 浏览器登录 xueqiu.com → F12 → Network → 任意接口请求头 Cookie（含 `xq_a_token=`、`u=` 等），完整复制。Cookie 会过期，过期后需更新 |
+| `XUEQIU_PID` | 雪球组合 ID | 打开你的雪球持仓页面，地址栏 `pid=` 后的数字 |
+
+工作原理：
+1. `scripts/fetch-monthly-report.mjs` 调用雪球持仓接口（`/v5/stock/portfolio/stock/list.json` + `hold_info.json`）
+2. 与 `data.json` 最新月份 diff，自动生成当月 `categories`（新开仓/清仓/加仓/减仓）与 `summary`（总资产/可用现金）
+3. 当月已有快照则**覆盖**（同月多次运行幂等），否则追加
+4. 提交 `data.json` → 现有 `月报-云端自动更新` 自动刷新行情并部署
+
+本地手动测试：
+
+```bash
+XUEQIU_COOKIE="xq_a_token=...; u=..." XUEQIU_PID="123456789" \
+  node scripts/fetch-monthly-report.mjs --force
+```
+
+> 注意：雪球接口返回的 `avg_cost` 可能为负（分红回收本金），月报展示已支持「成本已回收」徽章。
+> 节假日表按年度更新于脚本 `HOLIDAYS` 常量，请每年核对国务院放假安排。
+
 ## 本地开发
 
 ```bash

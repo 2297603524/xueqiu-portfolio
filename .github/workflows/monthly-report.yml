@@ -1,0 +1,48 @@
+name: 月报-月末自动抓取持仓
+
+# 每月最后 4 天（28-31 日）17:00 北京时间 = 09:00 UTC 触发；
+# 脚本内部会判断「今天是否为当月最后一个交易日」（工作日 + 法定节假日表），
+# 不是则直接退出，不会产生任何提交。
+on:
+  schedule:
+    - cron: "0 9 28-31 * *"
+  workflow_dispatch: {} # 支持在 Actions 页面手动运行（便于测试）
+
+permissions:
+  contents: write
+
+concurrency:
+  group: monthly-report
+  cancel-in-progress: false
+
+jobs:
+  fetch-and-commit:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 检出代码
+        uses: actions/checkout@v4
+
+      - name: 安装 Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: 抓取当月持仓数据
+        env:
+          XUEQIU_COOKIE: ${{ secrets.XUEQIU_COOKIE }}
+          XUEQIU_PID: ${{ secrets.XUEQIU_PID }}
+          TZ: Asia/Shanghai
+        run: node scripts/fetch-monthly-report.mjs
+
+      - name: 提交数据变更（如无变化则跳过）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add public/data.json
+          if git diff --cached --quiet; then
+            echo "数据无变化，跳过提交（可能非最后交易日或持仓未变）"
+          else
+            git commit -m "chore: 自动抓取 $(date +%Y-%m) 持仓月报 $(date +%Y-%m-%d)"
+            git push
+            echo "✅ 已提交，现有「月报-云端自动更新」将自动刷新行情并部署。"
+          fi
