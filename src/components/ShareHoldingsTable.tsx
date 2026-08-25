@@ -107,10 +107,13 @@ function ProfitCell({
   ratio,
   amount,
   sharesZero,
+  negativeCost,
 }: {
   ratio: number | null;
   amount: number;
   sharesZero?: boolean;
+  /** 成本为负（分红已回收本金），比例无法常规计算 */
+  negativeCost?: boolean;
 }) {
   const cls =
     ratio === null
@@ -123,7 +126,15 @@ function ProfitCell({
   return (
     <div>
       <div className={`font-medium tabular-nums ${cls}`}>
-        {ratio === null ? "—" : fmtSignedPercent(ratio)}
+        {negativeCost ? (
+          <span className="inline-block whitespace-nowrap rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-semibold text-emerald-600">
+            成本已回收
+          </span>
+        ) : ratio === null ? (
+          "—"
+        ) : (
+          fmtSignedPercent(ratio)
+        )}
       </div>
       <div className={`text-[11px] tabular-nums ${cls} opacity-80`}>
         {sharesZero ? "—" : `${amount > 0 ? "+" : ""}${fmtMoney(amount)}`}
@@ -249,6 +260,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                       ratio={h.profitRatio}
                       amount={h.profitAmount}
                       sharesZero={h.shares === 0}
+                      negativeCost={h.costPrice <= 0}
                     />
                   </Td>
                 </tr>
@@ -428,12 +440,13 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                     <Td className="text-right text-slate-600">
                       {fmtPercent(h.weight, 2)}
                     </Td>
-                    <Td className="text-right">
-                      <ProfitCell
-                        ratio={h.profitRatio}
-                        amount={h.profitAmountCNY}
-                      />
-                    </Td>
+                  <Td className="text-right">
+                    <ProfitCell
+                      ratio={h.profitRatio}
+                      amount={h.profitAmountCNY}
+                      negativeCost={h.costPriceHKD <= 0}
+                    />
+                  </Td>
                   </tr>
                 );
               })}
@@ -500,12 +513,16 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                   <Field
                     label="盈亏%"
                     value={
-                      h.profitRatio === null
+                      h.costPriceHKD <= 0
+                        ? "成本已回收"
+                        : h.profitRatio === null
                         ? "—"
                         : fmtSignedPercent(h.profitRatio)
                     }
                     valueClass={
-                      (h.profitRatio ?? 0) > 0
+                      h.costPriceHKD <= 0
+                        ? "text-emerald-600"
+                        : (h.profitRatio ?? 0) > 0
                         ? "text-rose-600"
                         : (h.profitRatio ?? 0) < 0
                         ? "text-emerald-600"
