@@ -35,10 +35,6 @@ export function FooterSummary({ auditedBy, estimated, live, hkdCny }: FooterSumm
           </>
         )}
       </div>
-
-      <p className="mt-3 text-center text-xs text-rose-400">
-        数据来源：雪球 @超级鹿鼎公 · 仅供学习参考，不构成投资建议
-      </p>
     </section>
   );
 }
