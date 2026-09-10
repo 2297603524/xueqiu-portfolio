@@ -75,6 +75,10 @@ jobs:
             cat /tmp/pages-put.json
           fi
 
+      - name: 取当天日期（供部署提交信息使用）
+        id: stamp
+        run: echo "date=$(TZ=Asia/Shanghai date +%Y-%m-%d)" >> "$GITHUB_OUTPUT"
+
       - name: 部署到 GitHub Pages（gh-pages 分支）
         uses: peaceiris/actions-gh-pages@v4
         with:
@@ -84,4 +88,5 @@ jobs:
           force_orphan: true
           user_name: "github-actions[bot]"
           user_email: "41898282+github-actions[bot]@users.noreply.github.com"
-          commit_message: "deploy: $(date +%Y-%m-%d) 持仓月报"
+          # 注意：这里不能用 shell 的 $(date)，不会被展开，必须用上一步的 output
+          commit_message: "deploy: ${{ steps.stamp.outputs.date }} 持仓月报"
