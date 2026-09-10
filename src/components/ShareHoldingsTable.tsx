@@ -33,11 +33,16 @@ function SortableTh({
   const active = current === k;
   return (
     <th
-      onClick={() => onSort(k)}
-      className={`px-3 py-2 font-medium text-left tracking-wide whitespace-nowrap cursor-pointer select-none transition hover:text-rose-700 ${className}`}
-      title="点击排序"
+      aria-sort={active ? (dir === 1 ? "ascending" : "descending") : "none"}
+      className={`px-3 py-2 font-medium text-left tracking-wide whitespace-nowrap ${className}`}
     >
-      <span className="inline-flex items-center gap-0.5">
+      {/* 用内层 button 承载点击，键盘 Tab/Enter 也能排序 */}
+      <button
+        type="button"
+        onClick={() => onSort(k)}
+        title={`按${label}排序`}
+        className="inline-flex cursor-pointer select-none items-center gap-0.5 transition hover:text-rose-700"
+      >
         {label}
         <span
           className={`text-[9px] transition ${
@@ -46,7 +51,7 @@ function SortableTh({
         >
           {active ? (dir === -1 ? "▼" : "▲") : "▼"}
         </span>
-      </span>
+      </button>
     </th>
   );
 }
@@ -104,24 +109,21 @@ function PriceCell({
   quote?: Quote;
   live: boolean;
 }) {
+  // 涨跌%必须带符号：用 Math.abs 会把下跌显示成正数（只是颜色变绿），极易误读
+  const pct = quote ? fmtSignedPercent(quote.changePct, 2) : "";
+  const up = !!quote && quote.changePct > 0;
+  const pctCls = up ? "text-rose-600" : "text-emerald-600";
+
   if (!live || !quote || quote.price !== price) {
     return (
       <div>
         <div className="font-mono tabular-nums">{fmtPrice(price)}</div>
         {quote && quote.changePct !== 0 && (
-          <div
-            className={`text-[11px] tabular-nums ${
-              quote.changePct > 0 ? "text-rose-600" : "text-emerald-600"
-            }`}
-          >
-            {quote.changePct > 0 ? "+" : ""}
-            {fmtPercent(Math.abs(quote.changePct), 2)}
-          </div>
+          <div className={`text-[11px] tabular-nums ${pctCls}`}>{pct}</div>
         )}
       </div>
     );
   }
-  const up = quote.changePct > 0;
   return (
     <div>
       <span
@@ -132,14 +134,7 @@ function PriceCell({
       >
         {fmtPrice(quote.price)}
       </span>
-      <div
-        className={`text-[11px] tabular-nums ${
-          up ? "text-rose-600" : "text-emerald-600"
-        }`}
-      >
-        {up ? "+" : ""}
-        {fmtPercent(Math.abs(quote.changePct), 2)}
-      </div>
+      <div className={`text-[11px] tabular-nums ${pctCls}`}>{pct}</div>
     </div>
   );
 }
@@ -231,9 +226,16 @@ interface SharesTableProps {
   holdings: AShareHolding[];
   quotes: Map<string, Quote> | null;
   live: boolean;
+  /** 月报总资产，用作合计行仓位占比的分母 */
+  totalAssets: number;
 }
 
-export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
+/** 占月报总资产的比例；总资产缺失时返回 0，避免出现「恒为 100%」的假象 */
+function shareOf(value: number, total: number): number {
+  return total > 0 ? value / total : 0;
+}
+
+export function ASharesTable({ holdings, quotes, live, totalAssets }: SharesTableProps) {
   const [sortKey, setSortKey] = useState<SortKey | null>("mv");
   const [sortDir, setSortDir] = useState<SortDir>(-1);
   const totalMV = holdings.reduce((a, h) => a + h.marketValue, 0);
@@ -325,9 +327,9 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                   </Td>
                   <Td>
                     <span
-                      className={`inline-block whitespace-nowrap rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op]}`}
+                      className={`inline-block whitespace-nowrap rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op] ?? OP_STYLE.hold}`}
                     >
-                      {OP_LABEL[h.op]}
+                      {OP_LABEL[h.op] ?? h.op}
                     </span>
                   </Td>
                   <Td className="text-right">{fmtPrice(h.costPrice)}</Td>
@@ -347,7 +349,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                       ratio={h.profitRatio}
                       amount={h.profitAmount}
                       sharesZero={h.shares === 0}
-                      negativeCost={h.costPrice <= 0}
+                      negativeCost={h.costPrice < 0}
                     />
                   </Td>
                 </tr>
@@ -363,7 +365,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                 <Td>{""}</Td>
                 <Td className="text-right text-rose-700">{fmtMoney(totalMV)}</Td>
                 <Td className="text-right">
-                  <WeightCell weight={totalMV / (totalMV || 1)} />
+                  <WeightCell weight={shareOf(totalMV, totalAssets)} />
                 </Td>
                 <Td className="text-right">
                   <span
@@ -386,7 +388,7 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
 
         {/* 移动端卡片 */}
         <div className="md:hidden divide-y divide-rose-100">
-          {holdings.map((h) => {
+          {sorted.map((h) => {
             const q = quotes?.get(h.code);
             return (
               <div key={h.code} className="p-4">
@@ -401,9 +403,9 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                     </span>
                   </div>
                   <span
-                    className={`rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op]}`}
+                    className={`rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op] ?? OP_STYLE.hold}`}
                   >
-                    {OP_LABEL[h.op]}
+                    {OP_LABEL[h.op] ?? h.op}
                   </span>
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
@@ -438,9 +440,17 @@ export function ASharesTable({ holdings, quotes, live }: SharesTableProps) {
                   <Field label="成本" value={fmtPrice(h.costPrice)} />
                   <Field
                     label="盈亏%"
-                    value={fmtSignedPercent(h.profitRatio)}
+                    value={
+                      h.costPrice < 0
+                        ? "成本已回收"
+                        : h.profitRatio === null
+                        ? "—"
+                        : fmtSignedPercent(h.profitRatio)
+                    }
                     valueClass={
-                      (h.profitRatio ?? 0) > 0
+                      h.costPrice < 0
+                        ? "text-emerald-600"
+                        : (h.profitRatio ?? 0) > 0
                         ? "text-rose-600"
                         : (h.profitRatio ?? 0) < 0
                         ? "text-emerald-600"
@@ -468,15 +478,26 @@ interface HSharesTableProps {
   holdings: HShareHolding[];
   quotes: Map<string, Quote> | null;
   live: boolean;
-  /** HKD/CNY 汇率（实时或兜底 0.92），用于从市值反推 HKD 现价 */
+  /** HKD/CNY 汇率（实时或兜底值），仅在旧数据缺少 currentPriceHKD 时用于反推现价 */
   hkdCny: number;
+  /** 月报总资产，用作合计行仓位占比的分母 */
+  totalAssets: number;
 }
 
-export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTableProps) {
+/** H 股展示用 HKD 现价：优先取数据里的 currentPriceHKD，旧数据缺字段时用市值反推兜底 */
+function hkdDisplayPrice(h: HShareHolding, hkdCny: number): number {
+  if (h.currentPriceHKD != null && h.currentPriceHKD > 0) return h.currentPriceHKD;
+  if (h.shares > 0 && hkdCny > 0) {
+    return Math.round((h.marketValueCNY / h.shares / hkdCny) * 100) / 100;
+  }
+  return 0;
+}
+
+export function HSharesTable({ holdings, quotes, live, hkdCny, totalAssets }: HSharesTableProps) {
   const [sortKey, setSortKey] = useState<SortKey | null>("mv");
   const [sortDir, setSortDir] = useState<SortDir>(-1);
   const totalMV = holdings.reduce((a, h) => a + h.marketValueCNY, 0);
-  const totalShares = holdings.reduce((a, h) => a + h.shares, 0);
+  const totalShares = holdings.reduce((a, h) => a + (h.shares > 0 ? h.shares : 0), 0);
   const totalProfit = holdings.reduce((a, h) => a + h.profitAmountCNY, 0);
 
   const sorted = useMemo(() => {
@@ -489,10 +510,8 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
         case "weight": va = a.weight; vb = b.weight; break;
         case "profit": va = a.profitAmountCNY; vb = b.profitAmountCNY; break;
         case "price": {
-          va =
-            a.shares > 0 ? Math.round((a.marketValueCNY / a.shares / hkdCny) * 100) / 100 : 0;
-          vb =
-            b.shares > 0 ? Math.round((b.marketValueCNY / b.shares / hkdCny) * 100) / 100 : 0;
+          va = hkdDisplayPrice(a, hkdCny);
+          vb = hkdDisplayPrice(b, hkdCny);
           break;
         }
         default: va = a.name; vb = b.name;
@@ -539,12 +558,7 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
             </thead>
             <tbody className="table-zebra">
               {sorted.map((h) => {
-                // 无实时价时从市值反推 HKD 现价（保留 2 位）
-                const hkdPrice =
-                  h.shares > 0
-                    ? Math.round((h.marketValueCNY / h.shares / hkdCny) * 100) /
-                      100
-                    : 0;
+                const hkdPrice = hkdDisplayPrice(h, hkdCny);
                 return (
                   <tr
                     key={h.code}
@@ -575,9 +589,9 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                     </Td>
                     <Td>
                       <span
-                        className={`inline-block rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op]}`}
+                        className={`inline-block rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op] ?? OP_STYLE.hold}`}
                       >
-                        {OP_LABEL[h.op]}
+                        {OP_LABEL[h.op] ?? h.op}
                       </span>
                     </Td>
                     <Td className="text-right">{fmtPrice(h.costPriceHKD)}</Td>
@@ -613,7 +627,7 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                 <Td>{""}</Td>
                 <Td className="text-right text-rose-700">{fmtMoney(totalMV)}</Td>
                 <Td className="text-right">
-                  <WeightCell weight={totalMV / (totalMV || 1)} />
+                  <WeightCell weight={shareOf(totalMV, totalAssets)} />
                 </Td>
                 <Td className="text-right">
                   <span
@@ -636,7 +650,7 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
 
         {/* 移动端卡片 */}
         <div className="md:hidden divide-y divide-rose-100">
-          {holdings.map((h) => {
+          {sorted.map((h) => {
             const q = quotes?.get(h.code);
             const hkdPrice =
               h.shares > 0
@@ -655,9 +669,9 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                     </span>
                   </div>
                   <span
-                    className={`rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op]}`}
+                    className={`rounded px-1.5 py-0.5 text-xs font-medium ${OP_STYLE[h.op] ?? OP_STYLE.hold}`}
                   >
-                    {OP_LABEL[h.op]}
+                    {OP_LABEL[h.op] ?? h.op}
                   </span>
                 </div>
                 <div className="mt-2 grid grid-cols-3 gap-2 text-xs">
@@ -693,14 +707,14 @@ export function HSharesTable({ holdings, quotes, live, hkdCny }: HSharesTablePro
                   <Field
                     label="盈亏%"
                     value={
-                      h.costPriceHKD <= 0
+                      h.costPriceHKD < 0
                         ? "成本已回收"
                         : h.profitRatio === null
                         ? "—"
                         : fmtSignedPercent(h.profitRatio)
                     }
                     valueClass={
-                      h.costPriceHKD <= 0
+                      h.costPriceHKD < 0
                         ? "text-emerald-600"
                         : (h.profitRatio ?? 0) > 0
                         ? "text-rose-600"

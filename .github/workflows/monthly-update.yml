@@ -9,7 +9,8 @@ on:
   workflow_dispatch: {} # 也支持在仓库 Actions 页面手动触发
   push:
     branches: [main]
-    paths: [public/data.json] # 数据变更自动重新部署
+    # 不限制 paths：任何推送到 main 都重新构建部署，避免"只改了 src/ 却不更新线上"。
+    # 本工作流自己用 GITHUB_TOKEN 推回 data.json，GitHub 不会用它再次触发工作流，不存在循环。
 
 permissions:
   contents: write # 推回数据 / 部署 gh-pages 分支
@@ -30,10 +31,10 @@ jobs:
       - name: 安装 Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 22
           cache: npm
 
-      - name: 刷新行情（腾讯行情 + 新浪汇率）
+      - name: 刷新行情（腾讯行情 + 腾讯外汇）
         run: node scripts/refresh-quotes.mjs
 
       - name: 提交数据变更（如无变化则跳过）

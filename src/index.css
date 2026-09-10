@@ -2,6 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
+html {
+  color-scheme: light;
+  -webkit-text-size-adjust: 100%;
+}
+
 html,
 body,
 #root {
@@ -11,6 +16,11 @@ body,
     "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+}
+
+/* 表格里的数字统一等宽对齐，避免刷新时列宽跳动 */
+.font-mono {
+  font-variant-numeric: tabular-nums;
 }
 
 /* 数字字体 */
@@ -105,4 +115,23 @@ body,
 }
 *::-webkit-scrollbar-thumb:hover {
   background: #fb7185; /* rose-400 */
+}
+
+/* ---------- 无障碍：尊重系统「减少动态效果」 ---------- */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* 键盘聚焦时给出清晰的焦点环 */
+:focus-visible {
+  outline: 2px solid #fb7185; /* rose-400 */
+  outline-offset: 2px;
+  border-radius: 6px;
 }

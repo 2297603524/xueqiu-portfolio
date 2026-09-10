@@ -18,7 +18,7 @@
 云端流水线由 GitHub Actions 驱动（.github/workflows/monthly-update.yml），**不依赖任何本地电脑**：
 
 1. **每月 1 日 09:00（北京时间）自动触发**，也支持在仓库 Actions 页面手动运行（Run workflow）。
-2. **行情刷新**：`node scripts/refresh-quotes.mjs` 通过腾讯行情接口（qt.gtimg.cn）自动拉取所有 A/H 股现价，换算 HKD/CNY 汇率（新浪接口），重算市值/仓位/盈亏并写回 `public/data.json`。
+2. **行情刷新**：`node scripts/refresh-quotes.mjs` 通过腾讯行情接口（qt.gtimg.cn）自动拉取所有 A/H 股现价，汇率取自腾讯外汇 `whHKDCNY`（失败再降级到新浪），重算市值/仓位/盈亏并写回 `public/data.json`。
 3. **数据自动提交**：刷新结果自动 commit 并 push 回 main 分支。
 4. **自动构建**：`npm ci && npm run build`（base=/xueqiu-portfolio/ 子路径）。
 5. **自动部署**：peaceiris/actions-gh-pages 将 dist 部署到 gh-pages 分支，GitHub Pages 自动更新。
@@ -39,19 +39,48 @@ xueqiu-portfolio/
 ├── public/
 │   └── data.json          # 月度持仓数据（每月追加一份，行情自动刷新）
 ├── scripts/
-│   └── refresh-quotes.mjs # 行情自动刷新脚本（腾讯行情 + 新浪汇率）
+│   └── refresh-quotes.mjs # 行情自动刷新脚本（腾讯行情 + 腾讯外汇）
 ├── src/
-│   ├── components/        # React 组件
-│   ├── lib/format.ts      # 数字格式化
+│   ├── components/        # React 组件（含 ErrorBoundary 兜底）
+│   ├── hooks/
+│   │   └── useRealtimeQuotes.ts  # 3s 轮询实时行情（后台标签页自动暂停）
+│   ├── lib/
+│   │   ├── format.ts      # 数字格式化
+│   │   └── realtime.ts    # JSONP 行情 / 汇率协议解析
 │   └── types.ts           # 数据模型
 ├── tailwind.config.js
 ├── vite.config.ts
 └── index.html
 ```
 
+## 数据口径与实时行情说明
+
+- **总资产 / 可用现金**：取自官方月报，不随行情波动，是"官方口径"。
+- **持仓市值 / 盈亏 / 仓位**：按最新行情（或 data.json 快照）计算，属"行情口径"。
+  两者可能略有差异，页面上已用 tooltip 与页脚口径标签标注。
+- **仓位**：分母统一为月报总资产，因此 A+H 各行的仓位可以纵向对比。
+- **实时行情**：浏览器通过 JSONP 直连 `qt.gtimg.cn`，默认 3 秒一次；
+  页面切到后台标签页时自动暂停轮询，切回来立即补一次。
+- **汇率**：优先腾讯外汇 `whHKDCNY`；不可用时依次降级到
+  `api.fxratesapi.com`、`open.er-api.com`，全部失败才用兜底常量（页脚会标注"兜底值"）。
+  之所以不用新浪 `hq.sinajs.cn`：它对外域 Referer 一律返回 403，浏览器端 JSONP 必然失败。
+- **H 股现价**：直接存储在 `currentPriceHKD` 字段，不再用"市值 ÷ 股数 ÷ 汇率"反推，避免抖动。
+- 非交易时段行情不变化属正常现象（接口返回的是最近一次收盘价）。
+
+## 常见坑（已修复，勿回退）
+
+| 坑 | 说明 |
+| --- | --- |
+| 腾讯涨跌幅字段 | `parts[32]` 是**百分数**（`0.04` 表示 0.04%），必须 `/100` 才是小数比例，否则被放大 100 倍 |
+| 涨跌幅显示 | 不能用 `Math.abs()`，否则下跌会显示成正数（只是颜色变绿） |
+| 合计行仓位 | 分母要用月报总资产，不能写成 `totalMV / totalMV`（恒为 100%） |
+| 汇率源 | 新浪 `hq.sinajs.cn` 对外域 Referer 返回 403，浏览器端不要用它 |
+| React setState | 不要在 `setState` 的 updater 里调用另一个 `setState`（严格模式下会重复执行） |
+
 ## 每月更新数据
 
-每次月初（1 日内）更新 `public/data.json`，在 `history` 数组头部追加一条新的月份快照即可：
+每次月初（1 日内）更新 `public/data.json`，在 `history` 数组**末尾追加**一条新的月份快照即可
+（数组按时间**升序**排列，最后一项即"最新月份"，前端与刷新脚本都以此为准）：
 
 ```jsonc
 {

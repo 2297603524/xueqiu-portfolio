@@ -84,31 +84,34 @@ export function Header({
 
           {/* 实时状态 */}
           <div className="flex items-center gap-2">
-            {realtimeOn && (
+            {realtimeOn ? (
               <button
                 type="button"
                 onClick={onToggleRealtime}
                 title="点击暂停实时刷新"
+                aria-label="暂停实时行情刷新"
+                aria-pressed={true}
                 className="flex items-center gap-2 rounded-full border border-emerald-300 bg-emerald-50 px-3 py-1.5 text-xs text-emerald-700 transition hover:bg-emerald-100"
               >
                 <span
-                  className={`live-dot h-2 w-2 rounded-full ${
-                    live ? "bg-emerald-500" : "bg-slate-300"
+                  className={`h-2 w-2 rounded-full ${
+                    live ? "live-dot bg-emerald-500" : realtimeError ? "bg-amber-400" : "bg-slate-300"
                   }`}
                 />
-                {live ? "实时行情 · 3s" : "连接中…"}
+                {live ? "实时行情 · 3s" : realtimeError ? "行情异常" : "连接中…"}
                 {live && timeStr && (
                   <span className="hidden text-emerald-600/70 sm:inline">
                     {timeStr} 更新
                   </span>
                 )}
               </button>
-            )}
-            {!realtimeOn && (
+            ) : (
               <button
                 type="button"
                 onClick={onToggleRealtime}
                 title="点击开启实时刷新"
+                aria-label="开启实时行情刷新"
+                aria-pressed={false}
                 className="flex items-center gap-2 rounded-full border border-rose-200 bg-white px-3 py-1.5 text-xs text-rose-500 transition hover:bg-rose-50"
               >
                 <span className="h-2 w-2 rounded-full bg-rose-300" />
@@ -135,7 +138,12 @@ export function Header({
         {/* 核心数字区 */}
         <div className="mt-4 grid grid-cols-2 gap-x-4 gap-y-2 md:grid-cols-5">
           <div className="col-span-2 md:col-span-1">
-            <div className="text-[11px] text-rose-400">账户总资产（CNY）</div>
+            <div
+              className="text-[11px] text-rose-400"
+              title="总资产取自官方月报口径；A/H 持仓市值为最新行情口径，两者可能略有差异"
+            >
+              账户总资产（CNY）
+            </div>
             <div className="mt-0.5 bg-gradient-to-r from-rose-600 via-red-500 to-orange-500 bg-clip-text font-mono text-2xl font-bold tabular-nums tracking-tight text-transparent md:text-3xl">
               ¥{fmtMoney(summary.totalAssets)}
             </div>
@@ -241,8 +249,9 @@ export function Header({
               </span>
               {monthlyPL.ratio != null && (
                 <span className="font-mono tabular-nums opacity-80">
+                  {/* 注意：这里不能用 Math.abs，否则亏损月份会被显示成正收益 */}
                   {monthlyPL.ratio > 0 ? "+" : ""}
-                  {fmtPercent(Math.abs(monthlyPL.ratio), 2)}
+                  {fmtPercent(monthlyPL.ratio, 2)}
                 </span>
               )}
             </span>
@@ -263,6 +272,8 @@ export function Header({
                   key={h.month}
                   type="button"
                   onClick={() => onMonthChange(h.month)}
+                  aria-current={active ? "true" : undefined}
+                  aria-label={est ? `${h.month}（估算数据）` : h.month}
                   className={`relative shrink-0 rounded-full px-3.5 py-1.5 text-sm whitespace-nowrap transition ${
                     active
                       ? "bg-white font-semibold text-rose-700 shadow-md shadow-rose-200"
@@ -285,8 +296,8 @@ export function Header({
         ) : (
           <div className="mt-3 flex items-center gap-2">
             <span className="flex items-center gap-2 rounded-full bg-white/70 px-4 py-1.5 text-sm font-medium text-rose-700 ring-1 ring-rose-200">
-              {history[0].label}
-              {history[0].audit?.estimated && (
+              {(history.find((h) => h.month === activeMonth) ?? history[0]).label}
+              {(history.find((h) => h.month === activeMonth) ?? history[0]).audit?.estimated && (
                 <span
                   className="inline-block h-1.5 w-1.5 rounded-full bg-amber-500"
                   title="估算数据"

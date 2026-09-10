@@ -89,7 +89,7 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
   return (
     <section className="mx-auto grid max-w-6xl grid-cols-2 gap-2.5 px-4 sm:grid-cols-2 lg:grid-cols-4">
       {categories.map((c, i) => {
-        const style = STYLES[c.type];
+        const style = STYLES[c.type] ?? STYLES.open;
         const sortedStocks = [...c.stocks].sort(
           (a, b) => Math.abs(b.delta) - Math.abs(a.delta)
         );
@@ -98,7 +98,7 @@ export function CategoryCards({ categories }: CategoryCardsProps) {
         return (
           <div
             key={c.type}
-            className="group relative overflow-hidden rounded-xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/40 transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-rose-200/50"
+            className="fade-in-up group relative overflow-hidden rounded-xl border border-rose-200/80 bg-white shadow-sm shadow-rose-100/40 transition duration-200 hover:-translate-y-0.5 hover:shadow-md hover:shadow-rose-200/50"
             style={{ animationDelay: `${i * 60}ms` }}
           >
             {/* 顶部渐变条 */}

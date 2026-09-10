@@ -7,14 +7,15 @@
  * 功能:
  *  1. 读取 public/data.json
  *  2. 通过腾讯行情接口拉取所有 A/H 股现价
- *  3. 通过新浪汇率接口拉取 HKD/CNY 汇率
+ *  3. 通过腾讯外汇接口拉取 HKD/CNY 汇率（失败再降级到新浪，最后才是兜底常量）
  *  4. 重算每只股票的 现价/市值/仓位/盈亏/盈亏比例
  *  5. 重算账户总资产与现金仓位
  *  6. 写回 data.json（历史月份也一并刷新现价，方便回溯）
  *
  * 数据源（均免登录）:
  *  - A/H 股行情: https://qt.gtimg.cn/q=<code>
- *  - 汇率: https://hq.sinajs.cn/list=fx_susdcny,fx_susdhkd  (HKDCNY = USDCNY / USDHKD)
+ *  - 汇率: https://qt.gtimg.cn/q=whHKDCNY （首选，与行情同源）
+ *          https://hq.sinajs.cn/list=fx_susdcny,fx_susdhkd  （备选，需带 sina Referer）
  */
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
@@ -37,10 +38,55 @@ async function fetchText(url, headers = {}) {
   return await res.text();
 }
 
-/** 腾讯行情返回是 GBK，转成 UTF-8 文本（Node 无法直接用 TextDecoder 处理 GBK，这里手动处理字节） */
-async function fetchQuote(text) {
-  return text;
+/** 兜底汇率：仅在所有实时源都失败时使用（2026-09 实际约 0.855） */
+const FALLBACK_HKD_CNY = 0.855;
+
+/** 汇率合理区间校验，防止接口异常值污染计算 */
+function saneRate(v) {
+  const n = parseFloat(v);
+  return Number.isFinite(n) && n > 0.5 && n < 1.5 ? n : null;
 }
+
+/**
+ * 拉取 HKD/CNY 汇率，多级降级：
+ *   1. 腾讯外汇 whHKDCNY（与行情同源，免 Referer）
+ *   2. 新浪 fx_susdcny / fx_susdhkd 相除（Node 端可带 Referer，实测可用）
+ *   3. FALLBACK_HKD_CNY
+ */
+async function fetchHkdCny() {
+  // 1) 腾讯外汇
+  try {
+    const txt = await fetchText("https://qt.gtimg.cn/q=whHKDCNY");
+    const m = txt.match(/="([^"]*)"/);
+    const rate = m ? saneRate(m[1].split("~")[3]) : null;
+    if (rate !== null) {
+      console.log("汇率来源: 腾讯 whHKDCNY");
+      return rate;
+    }
+  } catch (e) {
+    console.warn("腾讯外汇获取失败:", e.message);
+  }
+
+  // 2) 新浪
+  try {
+    const fx = await fetchText("https://hq.sinajs.cn/list=fx_susdcny,fx_susdhkd", {
+      Referer: "https://finance.sina.com.cn",
+    });
+    const usdCny = saneRate(fx.match(/fx_susdcny="([^"]*)/)?.[1]?.split(",")[1]);
+    const usdHkd = saneRate(fx.match(/fx_susdhkd="([^"]*)/)?.[1]?.split(",")[1]);
+    if (usdCny !== null && usdHkd !== null) {
+      console.log("汇率来源: 新浪外汇");
+      return usdCny / usdHkd;
+    }
+  } catch (e) {
+    console.warn("新浪外汇获取失败:", e.message);
+  }
+
+  console.warn(`汇率全部失败，使用兜底 ${FALLBACK_HKD_CNY}`);
+  return FALLBACK_HKD_CNY;
+}
+
+// ---------- 解析工具 ----------
 
 function parseTencentLine(line) {
   // v_sh600900="1~长江电力~600900~28.15~..."
@@ -97,20 +143,8 @@ async function main() {
   }
   console.log(`拿到 ${Object.keys(priceMap).length} 个现价。`);
 
-  // 2. 拉汇率
-  let hkdCny = 0.92; // 兜底值
-  try {
-    const fx = await fetchText("https://hq.sinajs.cn/list=fx_susdcny,fx_susdhkd", {
-      Referer: "https://finance.sina.com.cn",
-    });
-    const usdCny = fx.match(/fx_susdcny="([^"]*)/)?.[1]?.split(",")[1];
-    const usdHkd = fx.match(/fx_susdhkd="([^"]*)/)?.[1]?.split(",")[1];
-    if (usdCny && usdHkd && parseFloat(usdCny) > 0 && parseFloat(usdHkd) > 0) {
-      hkdCny = parseFloat(usdCny) / parseFloat(usdHkd);
-    }
-  } catch (e) {
-    console.warn("汇率获取失败，使用兜底 0.92:", e.message);
-  }
+  // 2. 拉汇率（多级降级，见 fetchHkdCny）
+  const hkdCny = await fetchHkdCny();
   console.log(`HKD/CNY 汇率: ${hkdCny.toFixed(4)}`);
 
   // 3. 刷新最新月份
@@ -138,9 +172,10 @@ async function main() {
     for (const s of hShares) {
       const pxHkd = priceMap[s.code];
       if (!pxHkd || s.shares <= 0) continue;
-      const pxCny = pxHkd * hkdCny;
-      s.marketValueCNY = Math.round(s.shares * pxCny);
-      // 成本价以 HKD 计；负成本（分红回收本金）时盈亏比例显示 —
+      // 直接记录 HKD 现价，前端无需再用「市值 ÷ 股数 ÷ 汇率」反推
+      s.currentPriceHKD = pxHkd;
+      s.marketValueCNY = Math.round(s.shares * pxHkd * hkdCny);
+      // 成本价以 HKD 计；负成本（分红回收本金）时盈亏比例保持 null，前端显示「成本已回收」
       s.profitAmountCNY = Math.round((pxHkd - s.costPriceHKD) * hkdCny * s.shares);
       if (s.costPriceHKD > 0) {
         s.profitRatio = (pxHkd - s.costPriceHKD) / s.costPriceHKD;

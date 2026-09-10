@@ -40,6 +40,8 @@ export interface HShareHolding {
   delta: number;
   op: OpType;
   costPriceHKD: number;
+  /** 现价（HKD）。旧数据可能缺失，读取时用「市值 / 股数 / 汇率」兜底反推 */
+  currentPriceHKD?: number;
   marketValueCNY: number;
   weight: number;
   profitAmountCNY: number;
