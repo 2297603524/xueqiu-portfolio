@@ -1,0 +1,263 @@
+{
+  "title": "月报",
+  "subtitle": "",
+  "currency": "CNY",
+  "history": [
+    {
+      "month": "2026-08",
+      "label": "2026 年 8 月",
+      "summary": {
+        "totalAssets": 19619542,
+        "availableCash": 1196718,
+        "cashRatio": 0.060996
+      },
+      "monthlyPL": {
+        "profit": 206000,
+        "ratio": 0.0106,
+        "note": "8 月官方月报（游戏仓）"
+      },
+      "categories": [
+        {
+          "type": "open",
+          "label": "新开仓",
+          "count": 0,
+          "stocks": []
+        },
+        {
+          "type": "close",
+          "label": "清仓",
+          "count": 0,
+          "stocks": []
+        },
+        {
+          "type": "add",
+          "label": "加仓",
+          "count": 2,
+          "stocks": [
+            {
+              "code": "600900.SH",
+              "name": "长江电力",
+              "delta": 10000
+            },
+            {
+              "code": "000807.SZ",
+              "name": "云铝股份",
+              "delta": 10100
+            }
+          ]
+        },
+        {
+          "type": "reduce",
+          "label": "减仓",
+          "count": 4,
+          "stocks": [
+            {
+              "code": "000933.SZ",
+              "name": "神火股份",
+              "delta": -15000
+            },
+            {
+              "code": "001286.SZ",
+              "name": "陕西能源",
+              "delta": -20000
+            },
+            {
+              "code": "600989.SH",
+              "name": "宝丰能源",
+              "delta": -5000
+            },
+            {
+              "code": "601225.SH",
+              "name": "陕西煤业",
+              "delta": -7000
+            }
+          ]
+        }
+      ],
+      "aShares": {
+        "marketValue": 13279319,
+        "holdings": [
+          {
+            "code": "600900.SH",
+            "name": "长江电力",
+            "shares": 147000,
+            "delta": 10000,
+            "op": "add",
+            "costPrice": 25.09,
+            "currentPrice": 28.36,
+            "marketValue": 4168920,
+            "weight": 0.21248814065078583,
+            "profitAmount": 480690,
+            "profitRatio": 0.13033080908728575
+          },
+          {
+            "code": "000933.SZ",
+            "name": "神火股份",
+            "shares": 102500,
+            "delta": -15000,
+            "op": "reduce",
+            "costPrice": 26.355,
+            "currentPrice": 25.72,
+            "marketValue": 2636300,
+            "weight": 0.13437112854112496,
+            "profitAmount": -65088,
+            "profitRatio": -0.024094099791311007
+          },
+          {
+            "code": "000807.SZ",
+            "name": "云铝股份",
+            "shares": 95100,
+            "delta": 10100,
+            "op": "add",
+            "costPrice": 20.564,
+            "currentPrice": 26.03,
+            "marketValue": 2475453,
+            "weight": 0.12617282299454288,
+            "profitAmount": 519817,
+            "profitRatio": 0.2658043182260261
+          },
+          {
+            "code": "511880.SH",
+            "name": "银华日利",
+            "shares": 18000,
+            "delta": 0,
+            "op": "hold",
+            "costPrice": 100.639,
+            "currentPrice": 100.829,
+            "marketValue": 1814922,
+            "weight": 0.09250582913709199,
+            "profitAmount": 3420,
+            "profitRatio": 0.0018879360883951324
+          },
+          {
+            "code": "001286.SZ",
+            "name": "陕西能源",
+            "shares": 100000,
+            "delta": -20000,
+            "op": "reduce",
+            "costPrice": 9.153,
+            "currentPrice": 9.43,
+            "marketValue": 943000,
+            "weight": 0.0480643228063122,
+            "profitAmount": 27700,
+            "profitRatio": 0.030263301649732243
+          },
+          {
+            "code": "600595.SH",
+            "name": "中孚实业",
+            "shares": 120000,
+            "delta": 0,
+            "op": "hold",
+            "costPrice": 6.027,
+            "currentPrice": 5.84,
+            "marketValue": 700800,
+            "weight": 0.0357194882530897,
+            "profitAmount": -22440,
+            "profitRatio": -0.03102704496432724
+          },
+          {
+            "code": "600989.SH",
+            "name": "宝丰能源",
+            "shares": 14000,
+            "delta": -5000,
+            "op": "reduce",
+            "costPrice": 19.796,
+            "currentPrice": 22.33,
+            "marketValue": 312620,
+            "weight": 0.01593411303892823,
+            "profitAmount": 35476,
+            "profitRatio": 0.12800565770862796
+          },
+          {
+            "code": "601225.SH",
+            "name": "陕西煤业",
+            "shares": 8800,
+            "delta": -7000,
+            "op": "reduce",
+            "costPrice": 11.314,
+            "currentPrice": 25.83,
+            "marketValue": 227304,
+            "weight": 0.011585591549486731,
+            "profitAmount": 127741,
+            "profitRatio": 1.2830121972777089
+          }
+        ]
+      },
+      "hShares": {
+        "marketValueHKD": null,
+        "marketValueCNY": 4470441,
+        "holdings": [
+          {
+            "code": "01898.HK",
+            "name": "中煤能源",
+            "shares": 195000,
+            "delta": 0,
+            "op": "hold",
+            "costPriceHKD": -3.04,
+            "marketValueCNY": 1739959,
+            "weight": 0.08868499580673188,
+            "profitAmountCNY": 2247099,
+            "profitRatio": null,
+            "currentPriceHKD": 10.43
+          },
+          {
+            "code": "00902.HK",
+            "name": "华能国际电力股份",
+            "shares": 280000,
+            "delta": 0,
+            "op": "hold",
+            "costPriceHKD": 3.908,
+            "marketValueCNY": 1345017,
+            "weight": 0.06855496422903246,
+            "profitAmountCNY": 408895,
+            "profitRatio": 0.43679631525076773,
+            "currentPriceHKD": 5.615
+          },
+          {
+            "code": "00883.HK",
+            "name": "中国海洋石油",
+            "shares": 30000,
+            "delta": 0,
+            "op": "hold",
+            "costPriceHKD": 25.66,
+            "marketValueCNY": 600561,
+            "weight": 0.03061034758099858,
+            "profitAmountCNY": -58003,
+            "profitRatio": -0.08807482462977403,
+            "currentPriceHKD": 23.4
+          },
+          {
+            "code": "01030.HK",
+            "name": "新城发展",
+            "shares": 550000,
+            "delta": 0,
+            "op": "hold",
+            "costPriceHKD": 0.78,
+            "marketValueCNY": 672851,
+            "weight": 0.0342949391988865,
+            "profitAmountCNY": 305841,
+            "profitRatio": 0.8333333333333331,
+            "currentPriceHKD": 1.43
+          },
+          {
+            "code": "00700.HK",
+            "name": "腾讯控股",
+            "shares": 300,
+            "delta": 0,
+            "op": "hold",
+            "costPriceHKD": 366.769,
+            "marketValueCNY": 112053,
+            "weight": 0.005711295401289184,
+            "profitAmountCNY": 17922,
+            "profitRatio": 0.19039504429218396,
+            "currentPriceHKD": 436.6
+          }
+        ]
+      },
+      "audit": {
+        "by": "雪球 8 月官方月报（持仓 OCR）",
+        "verified": true
+      }
+    }
+  ]
+}
