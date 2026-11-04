@@ -75,7 +75,7 @@
         }
       ],
       "aShares": {
-        "marketValue": 13469442,
+        "marketValue": 13485408,
         "holdings": [
           {
             "code": "600900.SH",
@@ -84,11 +84,11 @@
             "delta": 10000,
             "op": "add",
             "costPrice": 25.09,
-            "currentPrice": 29.86,
-            "marketValue": 4389420,
-            "weight": 0.22372693511397973,
-            "profitAmount": 701190,
-            "profitRatio": 0.1901155838979673
+            "currentPrice": 29.67,
+            "marketValue": 4361490,
+            "weight": 0.22230335448197516,
+            "profitAmount": 673260,
+            "profitRatio": 0.18254284575528107
           },
           {
             "code": "000933.SZ",
@@ -97,11 +97,11 @@
             "delta": -15000,
             "op": "reduce",
             "costPrice": 26.355,
-            "currentPrice": 25.78,
-            "marketValue": 2642450,
-            "weight": 0.13468459151594875,
-            "profitAmount": -58937,
-            "profitRatio": -0.021817491937013822
+            "currentPrice": 26.06,
+            "marketValue": 2671150,
+            "weight": 0.13614741873179304,
+            "profitAmount": -30238,
+            "profitRatio": -0.011193321950294126
           },
           {
             "code": "000807.SZ",
@@ -110,11 +110,11 @@
             "delta": 10100,
             "op": "add",
             "costPrice": 20.564,
-            "currentPrice": 25.08,
-            "marketValue": 2385108,
-            "weight": 0.12156797543999753,
-            "profitAmount": 429472,
-            "profitRatio": 0.21960708033456516
+            "currentPrice": 25.3,
+            "marketValue": 2406030,
+            "weight": 0.12263436118947119,
+            "profitAmount": 450394,
+            "profitRatio": 0.23030538805679832
           },
           {
             "code": "511880.SH",
@@ -123,11 +123,11 @@
             "delta": 0,
             "op": "hold",
             "costPrice": 100.639,
-            "currentPrice": 100.938,
-            "marketValue": 1816884,
-            "weight": 0.09260583147149919,
-            "profitAmount": 5382,
-            "profitRatio": 0.0029710152127903357
+            "currentPrice": 100.927,
+            "marketValue": 1816686,
+            "weight": 0.09259573949279754,
+            "profitAmount": 5184,
+            "profitRatio": 0.0028617136497780275
           },
           {
             "code": "001286.SZ",
@@ -136,11 +136,11 @@
             "delta": -20000,
             "op": "reduce",
             "costPrice": 9.153,
-            "currentPrice": 10.02,
-            "marketValue": 1002000,
-            "weight": 0.05107152858104435,
-            "profitAmount": 86700,
-            "profitRatio": 0.09472304162569639
+            "currentPrice": 9.94,
+            "marketValue": 994000,
+            "weight": 0.05066377186582643,
+            "profitAmount": 78700,
+            "profitRatio": 0.08598273790014192
           },
           {
             "code": "600595.SH",
@@ -149,11 +149,11 @@
             "delta": 0,
             "op": "hold",
             "costPrice": 6.027,
-            "currentPrice": 5.65,
-            "marketValue": 678000,
-            "weight": 0.03455738161471863,
-            "profitAmount": -45240,
-            "profitRatio": -0.06255185000829597
+            "currentPrice": 5.74,
+            "marketValue": 688800,
+            "weight": 0.03510785318026282,
+            "profitAmount": -34440,
+            "profitRatio": -0.0476190476190476
           },
           {
             "code": "600989.SH",
@@ -162,11 +162,11 @@
             "delta": -5000,
             "op": "reduce",
             "costPrice": 19.796,
-            "currentPrice": 22.43,
-            "marketValue": 314020,
-            "weight": 0.016005470464091363,
-            "profitAmount": 36876,
-            "profitRatio": 0.13305718326934737
+            "currentPrice": 22.25,
+            "marketValue": 311500,
+            "weight": 0.01587702709879772,
+            "profitAmount": 34356,
+            "profitRatio": 0.12396443726005257
           },
           {
             "code": "601225.SH",
@@ -175,17 +175,17 @@
             "delta": -7000,
             "op": "reduce",
             "costPrice": 11.314,
-            "currentPrice": 27.45,
-            "marketValue": 241560,
-            "weight": 0.012312214016005062,
-            "profitAmount": 141997,
-            "profitRatio": 1.4261976312533144
+            "currentPrice": 26.79,
+            "marketValue": 235752,
+            "weight": 0.012016182640756854,
+            "profitAmount": 136189,
+            "profitRatio": 1.3678628248188085
           }
         ]
       },
       "hShares": {
         "marketValueHKD": null,
-        "marketValueCNY": 4426469,
+        "marketValueCNY": 4452451,
         "holdings": [
           {
             "code": "01898.HK",
@@ -194,11 +194,11 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": -3.04,
-            "marketValueCNY": 1586683,
-            "weight": 0.08087258102151416,
-            "profitAmountCNY": 2090444,
+            "marketValueCNY": 1633214,
+            "weight": 0.08324424698598978,
+            "profitAmountCNY": 2137272,
             "profitRatio": null,
-            "currentPriceHKD": 9.575
+            "currentPriceHKD": 9.85
           },
           {
             "code": "00902.HK",
@@ -207,11 +207,11 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 3.908,
-            "marketValueCNY": 1450269,
-            "weight": 0.07391961545279702,
-            "profitAmountCNY": 520384,
-            "profitRatio": 0.5596212896622312,
-            "currentPriceHKD": 6.095
+            "marketValueCNY": 1432075,
+            "weight": 0.07299227474321265,
+            "profitAmountCNY": 501643,
+            "profitRatio": 0.539150460593654,
+            "currentPriceHKD": 6.015
           },
           {
             "code": "00883.HK",
@@ -220,11 +220,11 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 25.66,
-            "marketValueCNY": 612876,
-            "weight": 0.031238038074487162,
-            "profitAmountCNY": -41300,
-            "profitRatio": -0.06313328137178492,
-            "currentPriceHKD": 24.04
+            "marketValueCNY": 606604,
+            "weight": 0.030918356809756315,
+            "profitAmountCNY": -47957,
+            "profitRatio": -0.0732657833203429,
+            "currentPriceHKD": 23.78
           },
           {
             "code": "01030.HK",
@@ -233,11 +233,11 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 0.78,
-            "marketValueCNY": 675379,
-            "weight": 0.03442379032089536,
-            "profitAmountCNY": 310814,
-            "profitRatio": 0.8525641025641025,
-            "currentPriceHKD": 1.445
+            "marketValueCNY": 678114,
+            "weight": 0.03456319214791049,
+            "profitAmountCNY": 313336,
+            "profitRatio": 0.8589743589743588,
+            "currentPriceHKD": 1.45
           },
           {
             "code": "00700.HK",
@@ -246,11 +246,11 @@
             "delta": 0,
             "op": "hold",
             "costPriceHKD": 366.769,
-            "marketValueCNY": 101262,
-            "weight": 0.005161282562049614,
-            "profitAmountCNY": 7758,
-            "profitRatio": 0.08297048005692952,
-            "currentPriceHKD": 397.2
+            "marketValueCNY": 102444,
+            "weight": 0.005221528616723061,
+            "profitAmountCNY": 8885,
+            "profitRatio": 0.09496713190046055,
+            "currentPriceHKD": 401.6
           }
         ]
       },
